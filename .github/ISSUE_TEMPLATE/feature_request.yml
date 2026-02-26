@@ -1,0 +1,82 @@
+name: Feature Request
+description: Suggest a new feature or improvement for RunwayCtrl
+title: "[Feature]: "
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for suggesting a feature! Please describe the problem and your proposed solution.
+
+  - type: dropdown
+    id: component
+    attributes:
+      label: Component
+      description: Which area does this feature relate to?
+      options:
+        - Control Plane API
+        - SDK (sdk-core / sdk-node)
+        - Jira Integration
+        - ServiceNow Integration
+        - GitHub Integration
+        - Dashboard / Console
+        - Ledger / Database
+        - Governor (budgets / backoff / circuits)
+        - Leases
+        - Observability / OTel
+        - Ledger Insights / Analytics
+        - CI / Build / DevEx
+        - Documentation
+        - New Integration
+        - Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem Statement
+      description: What problem does this solve? What gap does it address?
+      placeholder: "When using RunwayCtrl with Jira, I need to..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: solution
+    attributes:
+      label: Proposed Solution
+      description: How should this feature work? Be specific about API changes, SDK changes, or UX.
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives Considered
+      description: What other approaches did you consider? Why is the proposed solution better?
+    validations:
+      required: false
+
+  - type: dropdown
+    id: guarantees
+    attributes:
+      label: Impact on Guarantees
+      description: Does this feature affect any of RunwayCtrl's five guarantees?
+      multiple: true
+      options:
+        - "A: Effectively-once (dedupe/replay)"
+        - "B: Governed retries (budgets/backoff/circuits)"
+        - "C: Bounded concurrency (leases)"
+        - "D: Explainable runs (audit/traces)"
+        - "E: Execution intelligence (insights)"
+        - "None / Not applicable"
+    validations:
+      required: false
+
+  - type: textarea
+    id: context
+    attributes:
+      label: Additional Context
+      description: Any other context — screenshots, links, examples, related issues.
+    validations:
+      required: false

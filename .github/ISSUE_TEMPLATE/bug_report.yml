@@ -1,0 +1,108 @@
+name: Bug Report
+description: Report a bug in RunwayCtrl
+title: "[Bug]: "
+labels: ["bug", "triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for taking the time to report a bug. Please fill out the sections below so we can reproduce and fix the issue quickly.
+
+  - type: input
+    id: version
+    attributes:
+      label: RunwayCtrl Version
+      description: Which version of RunwayCtrl are you using?
+      placeholder: "e.g., 0.1.0 or commit SHA"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: component
+    attributes:
+      label: Component
+      description: Which component is affected?
+      options:
+        - Control Plane API
+        - SDK (sdk-core / sdk-node)
+        - Jira Integration
+        - ServiceNow Integration
+        - GitHub Integration
+        - Dashboard / Console
+        - Ledger / Database
+        - Governor (budgets / backoff / circuits)
+        - Leases
+        - Observability / OTel
+        - CI / Build
+        - Documentation
+        - Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Bug Description
+      description: A clear and concise description of what the bug is.
+      placeholder: "When I call BeginAction with..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Steps to Reproduce
+      description: Exact steps to reproduce the behavior.
+      value: |
+        1. 
+        2. 
+        3. 
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected Behavior
+      description: What you expected to happen.
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual Behavior
+      description: What actually happened. Include error messages, status codes, decision values.
+    validations:
+      required: true
+
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      description: Your runtime environment.
+      value: |
+        - OS: 
+        - Node.js version: 
+        - pnpm version: 
+        - Docker version: 
+        - Postgres version: 
+    validations:
+      required: false
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Relevant Logs
+      description: Paste any relevant log output. **Redact secrets and API keys.**
+      render: shell
+    validations:
+      required: false
+
+  - type: textarea
+    id: context
+    attributes:
+      label: Additional Context
+      description: Any other context — action_key, trace_id, request_id, screenshots.
+    validations:
+      required: false
