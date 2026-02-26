@@ -23,5 +23,5 @@
     "isolatedModules": true
   },
   "include": ["src/**/*.ts"],
-  "exclude": ["node_modules", "dist", "coverage", "**/*.test.ts"]
+  "exclude": ["node_modules", "dist", "coverage"]
 }
