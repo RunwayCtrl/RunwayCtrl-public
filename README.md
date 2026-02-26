@@ -64,7 +64,7 @@ RunwayCtrl provides five testable guarantees:
 
 ```bash
 # Clone the repo
-git clone https://github.com/RemiH88/RunwayCtrl.git
+git clone https://github.com/RunwayCtrl/RunwayCtrl.git
 cd RunwayCtrl
 
 # Install dependencies

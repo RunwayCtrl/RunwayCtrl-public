@@ -14,7 +14,7 @@
 
 If you discover a security vulnerability in RunwayCtrl, please report it responsibly:
 
-1. **Email:** Send details to **security@runwayctrl.com** (or open a [GitHub Security Advisory](https://github.com/RemiH88/RunwayCtrl/security/advisories/new) on this repository)
+1. **Email:** Send details to **security@runwayctrl.com** (or open a [GitHub Security Advisory](https://github.com/RunwayCtrl/RunwayCtrl/security/advisories/new) on this repository)
 2. **Include:**
    - Description of the vulnerability
    - Steps to reproduce

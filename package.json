@@ -7,7 +7,7 @@
   "author": "RunwayCtrl Contributors",
   "repository": {
     "type": "git",
-    "url": "https://github.com/RemiH88/RunwayCtrl.git"
+    "url": "https://github.com/RunwayCtrl/RunwayCtrl.git"
   },
   "engines": {
     "node": ">=20.0.0",
