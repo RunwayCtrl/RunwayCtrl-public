@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="128" height="128" viewBox="0 0 128 128" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="RunwayCtrl logo">
+  <defs>
+    <linearGradient id="rcg" x1="20" y1="16" x2="112" y2="112" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#7C3AED"/>
+      <stop offset="0.55" stop-color="#06B6D4"/>
+      <stop offset="1" stop-color="#22C55E"/>
+    </linearGradient>
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%" color-interpolation-filters="sRGB">
+      <feGaussianBlur stdDeviation="6" result="blur"/>
+      <feColorMatrix in="blur" type="matrix" values="0 0 0 0 0.48  0 0 0 0 0.23  0 0 0 0 0.93  0 0 0 0.35 0" result="glow"/>
+      <feMerge>
+        <feMergeNode in="glow"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect x="10" y="10" width="108" height="108" rx="28" fill="#0B1220"/>
+  <rect x="10" y="10" width="108" height="108" rx="28" stroke="url(#rcg)" stroke-width="2" opacity="0.9"/>
+
+  <!-- Runway mark -->
+  <g filter="url(#glow)">
+    <!-- Centerline -->
+    <path d="M64 30V98" stroke="url(#rcg)" stroke-width="6" stroke-linecap="round" opacity="0.95"/>
+
+    <!-- Dashes -->
+    <path d="M64 40V44" stroke="#E5E7EB" stroke-width="4" stroke-linecap="round" opacity="0.8"/>
+    <path d="M64 54V58" stroke="#E5E7EB" stroke-width="4" stroke-linecap="round" opacity="0.8"/>
+    <path d="M64 68V72" stroke="#E5E7EB" stroke-width="4" stroke-linecap="round" opacity="0.8"/>
+    <path d="M64 82V86" stroke="#E5E7EB" stroke-width="4" stroke-linecap="round" opacity="0.8"/>
+
+    <!-- Edge lights -->
+    <circle cx="40" cy="44" r="3" fill="#38BDF8" opacity="0.9"/>
+    <circle cx="88" cy="44" r="3" fill="#38BDF8" opacity="0.9"/>
+    <circle cx="36" cy="62" r="3" fill="#22C55E" opacity="0.85"/>
+    <circle cx="92" cy="62" r="3" fill="#22C55E" opacity="0.85"/>
+    <circle cx="40" cy="80" r="3" fill="#A78BFA" opacity="0.9"/>
+    <circle cx="88" cy="80" r="3" fill="#A78BFA" opacity="0.9"/>
+  </g>
+
+  <!-- RC monogram (subtle) -->
+  <path d="M28 98C28 90 34 84 42 84H46C54 84 60 90 60 98" stroke="#94A3B8" stroke-width="3" stroke-linecap="round" opacity="0.25"/>
+  <path d="M100 98C96 94 90 92 84 92C74 92 66 98 66 108" stroke="#94A3B8" stroke-width="3" stroke-linecap="round" opacity="0.18"/>
+</svg>

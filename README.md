@@ -1,8 +1,9 @@
-<p align="center">
-  <img src="https://via.placeholder.com/120x120.png?text=RC" alt="RunwayCtrl" width="120" />
-</p>
+<!-- markdownlint-disable MD033 MD041 -->
 
-<h1 align="center">RunwayCtrl</h1>
+<p align="center">
+  <img src="assets/wordmark-light.svg#gh-light-mode-only" alt="RunwayCtrl" width="720" />
+  <img src="assets/wordmark.svg#gh-dark-mode-only" alt="RunwayCtrl" width="720" />
+</p>
 
 <p align="center">
   <strong>Agent execution control plane — make tool calls safe in production.</strong>
@@ -114,7 +115,7 @@ const result = await rc.execute('jira.create_issue', {
 
 ## Architecture
 
-```
+```text
 ┌─────────────────────────────────────────────────────┐
 │                   Agent / Runner                     │
 │                                                      │
@@ -193,7 +194,7 @@ const pr = await rc.execute('github.merge_pr', {
 
 ## Project Structure
 
-```
+```text
 RunwayCtrl/
 ├── apps/
 │   ├── control-plane/          # Fastify API — the core control plane
@@ -355,7 +356,7 @@ See [SECURITY.md](SECURITY.md) for our security policy and responsible disclosur
 
 This project is licensed under the [Apache License 2.0](LICENSE).
 
-```
+```text
 Copyright 2026 RunwayCtrl Contributors
 
 Licensed under the Apache License, Version 2.0 (the "License");
