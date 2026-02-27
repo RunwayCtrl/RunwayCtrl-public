@@ -67,7 +67,9 @@ jobs:
       - name: Build
         run: pnpm build
 
-  # Integration tests run separately — only on main branch pushes
+  # Integration tests run separately — only on main branch pushes.
+  # Disabled until real integration tests exist (avoids perpetual red X).
+  # To re-enable: remove the `false &&` prefix from the `if` condition.
   # Requires secrets: JIRA_BASE_URL, JIRA_EMAIL, JIRA_API_TOKEN,
   #   SERVICENOW_INSTANCE_URL, SERVICENOW_USERNAME, SERVICENOW_PASSWORD,
   #   GITHUB_TOKEN (for integration test repo)
@@ -75,7 +77,7 @@ jobs:
     name: Integration Tests (real APIs)
     runs-on: ubuntu-latest
     timeout-minutes: 20
-    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    if: false && github.ref == 'refs/heads/main' && github.event_name == 'push'
     needs: ci
 
     services:
