@@ -6,7 +6,7 @@
 </p>
 
 <p align="center">
-  <strong>Agent execution control plane, make tool calls safe in production.</strong>
+  <strong>Agent execution control plane. Every tool call — safe, idempotent, auditable.</strong>
 </p>
 
 <p align="center">
