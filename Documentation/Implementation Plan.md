@@ -40,6 +40,18 @@ You will have:
 - Backend Structure: `Documentation/Backend Structure.md`
 - Security Guidelines: `Documentation/Security Guidelines.md`
 
+### 0.3 Release workflow (applied after every phase gate)
+
+Every phase ends with a **Release Checklist** (see individual phases below). The standard workflow is:
+
+1. **Branch per feature** — create short-lived branches (`feat/`, `fix/`, `chore/`, `docs/`, `refactor/`) off `main`. Each branch = one reviewable PR.
+2. **Squash-merge to `main`** — every PR becomes one clean commit. Use conventional commit prefixes (`feat:`, `fix:`, `chore:`, `docs:`).
+3. **CI must pass** — branch protection requires all status checks green before merge. No direct pushes to `main`.
+4. **Tag + Release on gate pass** — when all gate criteria are met and CI is green, tag a release and create a GitHub Release with notes summarizing what shipped.
+5. **Update CHANGELOG** — add an entry for each phase completion.
+
+> **Team size note (2-person team):** We use this workflow for hygiene and muscle memory, not ceremony. PRs can be self-merged after CI passes. The goal is clean history and reliable rollback points — not bureaucracy.
+
 ---
 
 ## 1) Phase map (big picture)
@@ -122,6 +134,15 @@ flowchart LR
 
 > **Testing gate note (planned tightening in Phase 1/2):** During Phase 0 it is acceptable for the integration-test job to use `vitest run --passWithNoTests` while no integration tests exist yet.
 > Once we add the first real integration tests (expected during **Phase 1** for DB/repos and/or **Phase 2** for HTTP/auth), remove `--passWithNoTests` so CI fails if the integration-test suite is empty.
+
+### P0 Release Checklist
+
+- [ ] All Phase 0 work merged to `main` via squash-merge PRs
+- [ ] CI is green on `main`
+- [ ] Tag release: `git tag -a v0.0.1-phase0 -m "Phase 0: Repo foundation, dev environment, CI"`
+- [ ] Push tag: `git push origin v0.0.1-phase0`
+- [ ] Create GitHub Release from tag with summary of what shipped
+- [ ] Update `CHANGELOG.md` with Phase 0 entry
 
 ---
 
@@ -220,6 +241,16 @@ flowchart LR
 - [ ] Unique constraints prevent duplicates
 - [ ] Seed produces a working dev API key
 
+### P1 Release Checklist
+
+- [ ] All Phase 1 PRs squash-merged to `main` (branch naming: `feat/db-schema-*`, `feat/seed-*`, etc.)
+- [ ] CI is green on `main` (including first DB integration tests)
+- [ ] Re-enable integration test job in CI (`remove false &&` from `.github/workflows/ci.yml`)
+- [ ] Tag release: `git tag -a v0.1.0-phase1 -m "Phase 1: Ledger schema, data access layer, seed"`
+- [ ] Push tag: `git push origin v0.1.0-phase1`
+- [ ] Create GitHub Release from tag with migration summary and seed instructions
+- [ ] Update `CHANGELOG.md` with Phase 1 entry
+
 ---
 
 ## PHASE 2 — Control Plane API Skeleton (Fastify + Zod)
@@ -267,6 +298,15 @@ flowchart LR
 - [ ] Authenticated request returns tenant_id in context
 - [ ] Errors are safe and structured
 - [ ] OTel spans appear locally (collector logs or exporter)
+
+### P2 Release Checklist
+
+- [ ] All Phase 2 PRs squash-merged to `main` (branch naming: `feat/fastify-scaffold`, `feat/auth-middleware`, `feat/error-taxonomy`, etc.)
+- [ ] CI is green on `main`
+- [ ] Tag release: `git tag -a v0.1.0-phase2 -m "Phase 2: API skeleton, auth, error taxonomy, OTel bootstrap"`
+- [ ] Push tag: `git push origin v0.1.0-phase2`
+- [ ] Create GitHub Release from tag with endpoint summary and auth setup notes
+- [ ] Update `CHANGELOG.md` with Phase 2 entry
 
 ---
 
@@ -338,6 +378,15 @@ flowchart LR
 - [ ] UNKNOWN attempts are recorded
 - [ ] All operations are tenant-scoped and traced
 
+### P3 Release Checklist
+
+- [ ] All Phase 3 PRs squash-merged to `main` (branch naming: `feat/begin-action`, `feat/complete-attempt`, `feat/unknown-attempt`, etc.)
+- [ ] CI is green on `main`
+- [ ] Tag release: `git tag -a v0.1.0-phase3 -m "Phase 3: BeginAction, attempt lifecycle, state machine"`
+- [ ] Push tag: `git push origin v0.1.0-phase3`
+- [ ] Create GitHub Release from tag with API endpoint summary and example curl commands
+- [ ] Update `CHANGELOG.md` with Phase 3 entry
+
 ---
 
 ## PHASE 4 — Dedupe + Replay + Join/Pending
@@ -385,6 +434,15 @@ flowchart LR
 - [ ] Duplicate BeginAction calls with same ActionKey replay terminal outcomes
 - [ ] In-flight actions return PENDING or join behavior
 - [ ] Dedupe window is configurable (env or default)
+
+### P4 Release Checklist
+
+- [ ] All Phase 4 PRs squash-merged to `main` (branch naming: `feat/dedupe-replay`, `feat/join-pending`, etc.)
+- [ ] CI is green on `main`
+- [ ] Tag release: `git tag -a v0.1.0-phase4 -m "Phase 4: Dedupe, replay, join/pending — Guarantee A complete"`
+- [ ] Push tag: `git push origin v0.1.0-phase4`
+- [ ] Create GitHub Release from tag — highlight Guarantee A (effectively-once) now proven
+- [ ] Update `CHANGELOG.md` with Phase 4 entry
 
 ---
 
@@ -459,6 +517,15 @@ flowchart LR
 - [ ] **FIFO queueing:** waiters are granted in order of arrival
 - [ ] **Queue position:** clients can poll their position in queue
 
+### P5 Release Checklist
+
+- [ ] All Phase 5 PRs squash-merged to `main` (branch naming: `feat/lease-model`, `feat/fifo-queue`, etc.)
+- [ ] CI is green on `main`
+- [ ] Tag release: `git tag -a v0.1.0-phase5 -m "Phase 5: Leases, concurrency control — Guarantee C complete"`
+- [ ] Push tag: `git push origin v0.1.0-phase5`
+- [ ] Create GitHub Release from tag — highlight Guarantee C (bounded concurrency) now proven
+- [ ] Update `CHANGELOG.md` with Phase 5 entry
+
 ---
 
 ## PHASE 6 — Governor v1 (Budgets + Backoff + Circuit Breaker)
@@ -521,6 +588,15 @@ flowchart LR
 - [ ] Under simulated 429 storms, the system denies with `retry_after_ms` rather than amplifying load
 - [ ] Attempt caps prevent infinite retries
 - [ ] Circuit can open and recover (basic)
+
+### P6 Release Checklist
+
+- [ ] All Phase 6 PRs squash-merged to `main` (branch naming: `feat/governor-engine`, `feat/budget-limits`, `feat/circuit-breaker`, etc.)
+- [ ] CI is green on `main`
+- [ ] Tag release: `git tag -a v0.1.0-phase6 -m "Phase 6: Governor v1 — budgets, backoff, circuits — Guarantee B complete"`
+- [ ] Push tag: `git push origin v0.1.0-phase6`
+- [ ] Create GitHub Release from tag — highlight Guarantee B (governed retries) now proven
+- [ ] Update `CHANGELOG.md` with Phase 6 entry
 
 ## P6.6 Governor v1.1 hardening (make it production-credible)
 
@@ -645,6 +721,15 @@ flowchart LR
   - [ ] unknown outcome safety
   - [ ] lease enforcement (if configured)
   - [ ] OTel spans and correlation IDs
+
+### P7 Release Checklist
+
+- [ ] All Phase 7 PRs squash-merged to `main` (branch naming: `feat/sdk-core`, `feat/sdk-node`, `feat/sdk-otel`, etc.)
+- [ ] CI is green on `main`
+- [ ] Tag release: `git tag -a v0.1.0-phase7 -m "Phase 7: TypeScript SDK v0.1"`
+- [ ] Push tag: `git push origin v0.1.0-phase7`
+- [ ] Create GitHub Release from tag with SDK usage examples and install instructions
+- [ ] Update `CHANGELOG.md` with Phase 7 entry
 
 ---
 
@@ -902,6 +987,15 @@ CREATE INDEX idx_exec_stats_tenant_date
 - [ ] Write-heavy correctness harness passes invariants under concurrency (see `Documentation/RB-OPS-005-write-heavy-load-harness.md`)
 - [ ] Multi-instance correctness tests all pass (P8A Gate satisfied)
 - [ ] Ledger Insights endpoints return valid data (P8B Gate satisfied)
+
+### P8 Release Checklist
+
+- [ ] All Phase 8/8A/8B PRs squash-merged to `main`
+- [ ] CI is green on `main` (including multi-instance correctness tests)
+- [ ] Tag release: `git tag -a v0.1.0-phase8 -m "Phase 8: Observability, security hardening, multi-instance correctness, ledger insights — Guarantees D+E complete"`
+- [ ] Push tag: `git push origin v0.1.0-phase8`
+- [ ] Create GitHub Release from tag — highlight all 5 guarantees (A–E) now proven
+- [ ] Update `CHANGELOG.md` with Phase 8 entry
 
 ---
 
@@ -1369,6 +1463,15 @@ Reference (canonical for Phase 9):
 - [ ] README walkthroughs are copy/paste runnable
 - [ ] Dashboard shows integration-specific metrics (Phase 10)
 
+### P9 Release Checklist
+
+- [ ] All Phase 9 PRs squash-merged to `main` (branch naming: `feat/integration-jira`, `feat/integration-servicenow`, `feat/integration-github`, etc.)
+- [ ] CI is green on `main` (including integration-specific tests)
+- [ ] Tag release: `git tag -a v0.1.0-phase9 -m "Phase 9: Production integrations — Jira, ServiceNow, GitHub"`
+- [ ] Push tag: `git push origin v0.1.0-phase9`
+- [ ] Create GitHub Release from tag with per-integration summaries and example app links
+- [ ] Update `CHANGELOG.md` with Phase 9 entry
+
 ---
 
 ## PHASE 10 — Minimal Dashboard (v0.1)
@@ -1557,6 +1660,15 @@ Reference (canonical for Phase 9):
 - [ ] Dark mode + light mode both functional
 - [ ] All interactive elements (hover, click, drill-down) work without mutations (strictly read-only)
 - [ ] `prefers-reduced-motion` disables all animations and pulsing indicators
+
+### P10 Release Checklist
+
+- [ ] All Phase 10 PRs squash-merged to `main`
+- [ ] CI is green on `main`
+- [ ] Tag release: `git tag -a v0.1.0-phase10 -m "Phase 10: Dashboard v0.1 — action explorer, scoreboard, integration health, insights"`
+- [ ] Push tag: `git push origin v0.1.0-phase10`
+- [ ] Create GitHub Release from tag with dashboard screenshots and feature summary
+- [ ] Update `CHANGELOG.md` with Phase 10 entry
 
 ---
 
@@ -2197,6 +2309,15 @@ This assumes a publicly reachable staging ("Layer B") that external providers ca
 - [ ] At least 1-2 design partners can integrate without internal help
 - [ ] Bugs discovered are triaged into P0/P1/P2
 
+### P11 Release Checklist
+
+- [ ] All Phase 11 PRs squash-merged to `main`
+- [ ] CI is green on `main`
+- [ ] Tag release: `git tag -a v0.1.0-beta -m "v0.1.0-beta: Beta release — design partner ready"`
+- [ ] Push tag: `git push origin v0.1.0-beta`
+- [ ] Create GitHub Release (mark as pre-release) with onboarding guide and known limitations
+- [ ] Update `CHANGELOG.md` with beta entry
+
 ---
 
 ## PHASE 12 - Ops Polish + v0.2 Prep
@@ -2229,6 +2350,16 @@ This assumes a publicly reachable staging ("Layer B") that external providers ca
 
 - [ ] System stable under sustained load
 - [ ] v0.2 roadmap documented
+
+### P12 Release Checklist
+
+- [ ] All Phase 12 PRs squash-merged to `main`
+- [ ] CI is green on `main`
+- [ ] Tag release: `git tag -a v0.1.0 -m "v0.1.0: Production release"`
+- [ ] Push tag: `git push origin v0.1.0`
+- [ ] Create GitHub Release (mark as latest) with full v0.1 feature summary
+- [ ] Update `CHANGELOG.md` with v0.1.0 stable entry
+- [ ] Archive v0.1 milestone in GitHub Issues/Projects
 
 ---
 
