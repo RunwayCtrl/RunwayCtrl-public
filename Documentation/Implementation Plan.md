@@ -90,11 +90,11 @@ flowchart LR
 
 ### P0.0.1 Source Control + CI/CD Platform
 
-| Service | What you need | Sign-up / action | Used in |
-|---|---|---|---|
-| **GitHub** (github.com) | Owner account on `RunwayCtrl` org; push access to repo | Already have ✓ — verify org ownership and branch protection settings | All phases (source control, CI, PR workflows, GitHub Actions, release tags) |
-| **GitHub Actions** | Included with GitHub — no separate signup | Enable Actions in repo settings if not already on; configure `Settings → Actions → General` permissions | Phase 0+ (CI), Phase 10.4 (CD pipelines) |
-| **GitHub Packages / npm** | Publish scope for `@runwayctrl/*` packages | Verify the org has GitHub Packages enabled, OR plan to use npmjs.com (see below) | Phase 7 (SDK), Phase 11 (publish) |
+| Service                   | What you need                                          | Sign-up / action                                                                                        | Used in                                                                     |
+| ------------------------- | ------------------------------------------------------ | ------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------- |
+| **GitHub** (github.com)   | Owner account on `RunwayCtrl` org; push access to repo | Already have ✓ — verify org ownership and branch protection settings                                    | All phases (source control, CI, PR workflows, GitHub Actions, release tags) |
+| **GitHub Actions**        | Included with GitHub — no separate signup              | Enable Actions in repo settings if not already on; configure `Settings → Actions → General` permissions | Phase 0+ (CI), Phase 10.4 (CD pipelines)                                    |
+| **GitHub Packages / npm** | Publish scope for `@runwayctrl/*` packages             | Verify the org has GitHub Packages enabled, OR plan to use npmjs.com (see below)                        | Phase 7 (SDK), Phase 11 (publish)                                           |
 
 **CLI to install:**
 
@@ -106,8 +106,8 @@ flowchart LR
 
 ### P0.0.2 Package Registry (npm)
 
-| Service | What you need | Sign-up / action | Used in |
-|---|---|---|---|
+| Service       | What you need                                              | Sign-up / action                                                                                 | Used in                                               |
+| ------------- | ---------------------------------------------------------- | ------------------------------------------------------------------------------------------------ | ----------------------------------------------------- |
 | **npmjs.com** | Account + org scope `@runwayctrl` (if publishing publicly) | Sign up at https://www.npmjs.com/signup → create org `runwayctrl` → generate an automation token | Phase 7 (SDK publish prep), Phase 11 (public publish) |
 
 > **Decision:** If publishing only via GitHub Packages, npm signup can be deferred to Phase 11. If you want the `@runwayctrl` scope reserved on npm now, sign up early.
@@ -118,22 +118,22 @@ flowchart LR
 
 ### P0.0.3 Runtime + Language Toolchain
 
-| Tool | What you need | Install / action | Used in |
-|---|---|---|---|
-| **Node.js >= 20 LTS** | Local runtime | `winget install OpenJS.NodeJS.LTS` or https://nodejs.org/ | All phases |
-| **pnpm >= 9** | Package manager (monorepo) | `corepack enable && corepack prepare pnpm@9.15.4 --activate` (or `npm i -g pnpm`) | All phases |
-| **TypeScript** | Dev dependency — no separate install | Included in `devDependencies` | All phases |
+| Tool                  | What you need                        | Install / action                                                                  | Used in    |
+| --------------------- | ------------------------------------ | --------------------------------------------------------------------------------- | ---------- |
+| **Node.js >= 20 LTS** | Local runtime                        | `winget install OpenJS.NodeJS.LTS` or https://nodejs.org/                         | All phases |
+| **pnpm >= 9**         | Package manager (monorepo)           | `corepack enable && corepack prepare pnpm@9.15.4 --activate` (or `npm i -g pnpm`) | All phases |
+| **TypeScript**        | Dev dependency — no separate install | Included in `devDependencies`                                                     | All phases |
 
-*No account needed — just install.*
+_No account needed — just install._
 
 ---
 
 ### P0.0.4 Container + Local Infrastructure
 
-| Tool | What you need | Install / action | Used in |
-|---|---|---|---|
-| **Docker Desktop** (or Docker Engine + Compose) | Run Postgres, Redis, OTel Collector, multi-instance tests locally | https://www.docker.com/products/docker-desktop/ — accept license, install, start | Phase 0+ (Postgres), Phase 8A (multi-instance), Phase 13 (demo mocks) |
-| **Docker Hub** *(optional)* | Account for pulling rate-limited images (anonymous = 100 pulls/6h) | Sign up at https://hub.docker.com/ (free tier) — `docker login` | Phase 0+ |
+| Tool                                            | What you need                                                      | Install / action                                                                 | Used in                                                               |
+| ----------------------------------------------- | ------------------------------------------------------------------ | -------------------------------------------------------------------------------- | --------------------------------------------------------------------- |
+| **Docker Desktop** (or Docker Engine + Compose) | Run Postgres, Redis, OTel Collector, multi-instance tests locally  | https://www.docker.com/products/docker-desktop/ — accept license, install, start | Phase 0+ (Postgres), Phase 8A (multi-instance), Phase 13 (demo mocks) |
+| **Docker Hub** _(optional)_                     | Account for pulling rate-limited images (anonymous = 100 pulls/6h) | Sign up at https://hub.docker.com/ (free tier) — `docker login`                  | Phase 0+                                                              |
 
 **CLI:** `docker` and `docker compose` are included with Docker Desktop.
 
@@ -141,9 +141,9 @@ flowchart LR
 
 ### P0.0.5 Database
 
-| Service | What you need | Sign-up / action | Used in |
-|---|---|---|---|
-| **PostgreSQL (local)** | Runs via Docker — no account needed | Included in `docker-compose.yml` | Phase 0–12 (ledger) |
+| Service                             | What you need                                 | Sign-up / action                                                                                                                                                                                                                                                                   | Used in                           |
+| ----------------------------------- | --------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------- |
+| **PostgreSQL (local)**              | Runs via Docker — no account needed           | Included in `docker-compose.yml`                                                                                                                                                                                                                                                   | Phase 0–12 (ledger)               |
 | **Managed Postgres (staging/prod)** | A hosted Postgres instance with backups + TLS | **Render:** https://render.com/ → sign up → create PostgreSQL instance (free tier available for dev; paid for prod). **Alternatives:** Neon (https://neon.tech/), Supabase (https://supabase.com/), Railway (https://railway.com/), or cloud-native (RDS/Cloud SQL/Azure Postgres) | Phase 10.4+ (hosted environments) |
 
 > **Action for staging:** Create the managed Postgres instance before Phase 10.4.2. Record the connection string (`DATABASE_URL`) in your secrets manager.
@@ -152,39 +152,39 @@ flowchart LR
 
 ### P0.0.6 Hosting / Deployment Platforms
 
-| Service | What you need | Sign-up / action | Used in |
-|---|---|---|---|
-| **Vercel** | Account + project for `apps/console` (Next.js) | Sign up at https://vercel.com/ → connect GitHub repo → create project | Phase 10.4 (hosted console at `console.runwayctrl.com`) |
-| **Render** | Account + web services for control-plane + managed Postgres | Sign up at https://render.com/ → connect GitHub repo | Phase 10.4 (hosted control-plane + DB) |
+| Service    | What you need                                               | Sign-up / action                                                      | Used in                                                 |
+| ---------- | ----------------------------------------------------------- | --------------------------------------------------------------------- | ------------------------------------------------------- |
+| **Vercel** | Account + project for `apps/console` (Next.js)              | Sign up at https://vercel.com/ → connect GitHub repo → create project | Phase 10.4 (hosted console at `console.runwayctrl.com`) |
+| **Render** | Account + web services for control-plane + managed Postgres | Sign up at https://render.com/ → connect GitHub repo                  | Phase 10.4 (hosted control-plane + DB)                  |
 
 > **Alternatives (pick one container host):** Fly.io (https://fly.io/), Railway (https://railway.com/), or cloud-native (AWS ECS/Cloud Run/Azure Container Apps). The implementation plan defaults to Render for simplicity.
 
 **CLIs to install:**
 
 - [ ] `vercel` CLI — `pnpm add -g vercel` → `vercel login`
-- [ ] Render CLI *(optional)* — Render is primarily web-dashboard-driven; CLI is nascent. Use the dashboard.
+- [ ] Render CLI _(optional)_ — Render is primarily web-dashboard-driven; CLI is nascent. Use the dashboard.
 
 ---
 
 ### P0.0.7 Domain + DNS
 
-| Service | What you need | Sign-up / action | Used in |
-|---|---|---|---|
-| **Domain registrar** (for `runwayctrl.com`) | DNS management access | Verify you own `runwayctrl.com` and can create subdomains (`console.runwayctrl.com`, `api.runwayctrl.com`, `staging.console.runwayctrl.com`) | Phase 10.4.1 |
-| **Cloudflare** *(recommended)* | DNS + CDN + WAF for control-plane perimeter | Sign up at https://www.cloudflare.com/ (free tier) → add `runwayctrl.com` zone → point nameservers | Phase 10.4.4 (WAF/perimeter), optional earlier |
+| Service                                     | What you need                               | Sign-up / action                                                                                                                             | Used in                                        |
+| ------------------------------------------- | ------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------- |
+| **Domain registrar** (for `runwayctrl.com`) | DNS management access                       | Verify you own `runwayctrl.com` and can create subdomains (`console.runwayctrl.com`, `api.runwayctrl.com`, `staging.console.runwayctrl.com`) | Phase 10.4.1                                   |
+| **Cloudflare** _(recommended)_              | DNS + CDN + WAF for control-plane perimeter | Sign up at https://www.cloudflare.com/ (free tier) → add `runwayctrl.com` zone → point nameservers                                           | Phase 10.4.4 (WAF/perimeter), optional earlier |
 
 ---
 
 ### P0.0.8 Observability + Telemetry
 
-| Service | What you need | Sign-up / action | Used in |
-|---|---|---|---|
-| **OpenTelemetry Collector** (local) | Runs via Docker — no account needed | Included in `docker-compose.yml` | Phase 2+ (OTel bootstrap) |
-| **Observability backend** (traces + metrics + logs) | An OTLP-compatible backend to view traces/metrics | **Pick one (sign up for free tier):** | Phase 8+ (production observability) |
-| | | • **Grafana Cloud:** https://grafana.com/auth/sign-up/create-user (generous free tier: 50GB logs, 10K metrics, 50GB traces) | |
-| | | • **Honeycomb:** https://www.honeycomb.io/signup (free tier: 20M events/mo) | |
-| | | • **Axiom:** https://axiom.co/ (free tier: 500GB/mo ingest) | |
-| | | • **Jaeger (self-hosted):** add to Docker Compose (no account) | |
+| Service                                             | What you need                                     | Sign-up / action                                                                                                            | Used in                             |
+| --------------------------------------------------- | ------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------- | ----------------------------------- |
+| **OpenTelemetry Collector** (local)                 | Runs via Docker — no account needed               | Included in `docker-compose.yml`                                                                                            | Phase 2+ (OTel bootstrap)           |
+| **Observability backend** (traces + metrics + logs) | An OTLP-compatible backend to view traces/metrics | **Pick one (sign up for free tier):**                                                                                       | Phase 8+ (production observability) |
+|                                                     |                                                   | • **Grafana Cloud:** https://grafana.com/auth/sign-up/create-user (generous free tier: 50GB logs, 10K metrics, 50GB traces) |                                     |
+|                                                     |                                                   | • **Honeycomb:** https://www.honeycomb.io/signup (free tier: 20M events/mo)                                                 |                                     |
+|                                                     |                                                   | • **Axiom:** https://axiom.co/ (free tier: 500GB/mo ingest)                                                                 |                                     |
+|                                                     |                                                   | • **Jaeger (self-hosted):** add to Docker Compose (no account)                                                              |                                     |
 
 > **Recommendation:** Start with **Grafana Cloud** (free tier covers dev + staging easily) or **Jaeger** self-hosted for local-only. Sign up now so OTLP exporter config is ready when Phase 2 OTel bootstrap begins.
 
@@ -194,13 +194,13 @@ flowchart LR
 
 ### P0.0.9 Authentication + Email (Hosted Console)
 
-| Service | What you need | Sign-up / action | Used in |
-|---|---|---|---|
-| **Auth.js / NextAuth** | Library — no account needed | Included as dependency in `apps/console` | Phase 10.4.3 (console auth) |
-| **Email provider** (for magic link delivery) | Transactional email API + API key | **Pick one (sign up for free tier):** | Phase 10.4.3 |
-| | | • **Resend:** https://resend.com/ (free: 3K emails/mo, 100/day) — sign up → generate API key → record `RESEND_API_KEY` | |
-| | | • **Postmark:** https://postmarkapp.com/ (free: 100 emails/mo on dev) | |
-| | | • **AWS SES:** https://aws.amazon.com/ (free tier for 12 months) | |
+| Service                                      | What you need                     | Sign-up / action                                                                                                       | Used in                     |
+| -------------------------------------------- | --------------------------------- | ---------------------------------------------------------------------------------------------------------------------- | --------------------------- |
+| **Auth.js / NextAuth**                       | Library — no account needed       | Included as dependency in `apps/console`                                                                               | Phase 10.4.3 (console auth) |
+| **Email provider** (for magic link delivery) | Transactional email API + API key | **Pick one (sign up for free tier):**                                                                                  | Phase 10.4.3                |
+|                                              |                                   | • **Resend:** https://resend.com/ (free: 3K emails/mo, 100/day) — sign up → generate API key → record `RESEND_API_KEY` |                             |
+|                                              |                                   | • **Postmark:** https://postmarkapp.com/ (free: 100 emails/mo on dev)                                                  |                             |
+|                                              |                                   | • **AWS SES:** https://aws.amazon.com/ (free tier for 12 months)                                                       |                             |
 
 > **Recommendation:** **Resend** — simple API, good free tier, great DX. Sign up before Phase 10.4.3.
 
@@ -208,8 +208,8 @@ flowchart LR
 
 ### P0.0.10 LLM Provider (The Hub — Phase 8B.6)
 
-| Service | What you need | Sign-up / action | Used in |
-|---|---|---|---|
+| Service    | What you need        | Sign-up / action                                                                                | Used in                       |
+| ---------- | -------------------- | ----------------------------------------------------------------------------------------------- | ----------------------------- |
 | **OpenAI** | API access + API key | Sign up at https://platform.openai.com/ → generate API key → record as `RUNWAYCTRL_HUB_API_KEY` | Phase 8B.6 (Hub LLM analysis) |
 
 > **Gated by `ENABLE_HUB` flag.** Not required until Phase 8B, but API key provisioning takes < 5 minutes. Budget: ~$0.01/tenant/day.
@@ -222,54 +222,54 @@ flowchart LR
 
 > These are free-tier developer instances for testing real API behavior. Provision them now so they exist when Phase 9 coding begins.
 
-| Service | What you need | Sign-up / action | Used in |
-|---|---|---|---|
-| **Jira Cloud Developer Site** (free) | A sandbox Jira instance | Sign up at https://developer.atlassian.com/ → "Create a cloud development site" → create project `RCTEST` → generate API token at https://id.atlassian.com/manage-profile/security/api-tokens → record `JIRA_BASE_URL`, `JIRA_EMAIL`, `JIRA_API_TOKEN` | Phase 9.2 (Jira integration) |
-| **ServiceNow Personal Developer Instance** (free) | A sandbox ServiceNow instance | Sign up at https://developer.servicenow.com/ → "Request Instance" → note instance URL → record `SERVICENOW_INSTANCE_URL`, `SERVICENOW_USERNAME`, `SERVICENOW_PASSWORD` | Phase 9.2B (ServiceNow integration) |
-| **GitHub** (test repo) | Dedicated test repository | Create `RunwayCtrl/runwayctrl-integration-test` (private) → generate fine-grained PAT scoped to test repo → record `GITHUB_TOKEN` | Phase 9.3 (GitHub integration) |
+| Service                                           | What you need                 | Sign-up / action                                                                                                                                                                                                                                       | Used in                             |
+| ------------------------------------------------- | ----------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ----------------------------------- |
+| **Jira Cloud Developer Site** (free)              | A sandbox Jira instance       | Sign up at https://developer.atlassian.com/ → "Create a cloud development site" → create project `RCTEST` → generate API token at https://id.atlassian.com/manage-profile/security/api-tokens → record `JIRA_BASE_URL`, `JIRA_EMAIL`, `JIRA_API_TOKEN` | Phase 9.2 (Jira integration)        |
+| **ServiceNow Personal Developer Instance** (free) | A sandbox ServiceNow instance | Sign up at https://developer.servicenow.com/ → "Request Instance" → note instance URL → record `SERVICENOW_INSTANCE_URL`, `SERVICENOW_USERNAME`, `SERVICENOW_PASSWORD`                                                                                 | Phase 9.2B (ServiceNow integration) |
+| **GitHub** (test repo)                            | Dedicated test repository     | Create `RunwayCtrl/runwayctrl-integration-test` (private) → generate fine-grained PAT scoped to test repo → record `GITHUB_TOKEN`                                                                                                                      | Phase 9.3 (GitHub integration)      |
 
 ---
 
 ### P0.0.12 Code Quality + Security Scanning
 
-| Service | What you need | Sign-up / action | Used in |
-|---|---|---|---|
-| **GitHub CodeQL** | SAST — included with GitHub | Enable in repo: `Settings → Code security → Code scanning → Set up → Default` | Phase 0.3 (CI) |
-| **Dependabot** | Dependency scanning — included with GitHub | Enable: `Settings → Code security → Dependabot alerts → Enable` + add `dependabot.yml` | Phase 0.3 (CI) |
-| **Renovate** *(alternative to Dependabot)* | Dependency update PRs | Install GitHub App: https://github.com/apps/renovate → authorize for `RunwayCtrl` org | Phase 0.3 (CI) |
-| **Codecov** *(optional)* | Coverage reporting | Sign up at https://codecov.io/ → connect GitHub → add repo → record `CODECOV_TOKEN` | Phase 0.3+ (CI coverage) |
+| Service                                    | What you need                              | Sign-up / action                                                                       | Used in                  |
+| ------------------------------------------ | ------------------------------------------ | -------------------------------------------------------------------------------------- | ------------------------ |
+| **GitHub CodeQL**                          | SAST — included with GitHub                | Enable in repo: `Settings → Code security → Code scanning → Set up → Default`          | Phase 0.3 (CI)           |
+| **Dependabot**                             | Dependency scanning — included with GitHub | Enable: `Settings → Code security → Dependabot alerts → Enable` + add `dependabot.yml` | Phase 0.3 (CI)           |
+| **Renovate** _(alternative to Dependabot)_ | Dependency update PRs                      | Install GitHub App: https://github.com/apps/renovate → authorize for `RunwayCtrl` org  | Phase 0.3 (CI)           |
+| **Codecov** _(optional)_                   | Coverage reporting                         | Sign up at https://codecov.io/ → connect GitHub → add repo → record `CODECOV_TOKEN`    | Phase 0.3+ (CI coverage) |
 
 ---
 
 ### P0.0.13 SDK Publishing + Changelog
 
-| Tool | What you need | Install / action | Used in |
-|---|---|---|---|
+| Tool           | What you need                        | Install / action                                              | Used in                    |
+| -------------- | ------------------------------------ | ------------------------------------------------------------- | -------------------------- |
 | **Changesets** | Versioning + changelog (npm package) | `pnpm add -D @changesets/cli` in repo → `pnpm changeset init` | Phase 7 (SDK version prep) |
 
-*No account needed — just a dev dependency.*
+_No account needed — just a dev dependency._
 
 ---
 
 ### P0.0.14 Testing Tools
 
-| Tool | What you need | Install / action | Used in |
-|---|---|---|---|
-| **Vitest** | Test runner (already in devDeps) | Already installed ✓ | All phases |
-| **testcontainers-node** | Programmatic Docker for integration tests | `pnpm add -D testcontainers` (when needed) | Phase 8A (multi-instance tests) |
-| **MSW (Mock Service Worker)** | API mocking for integration tests | `pnpm add -D msw` (when needed) | Phase 9 (mock Jira/ServiceNow/GitHub) |
-| **Playwright** *(optional)* | Browser E2E tests for console | `pnpm add -D @playwright/test` → `npx playwright install` | Phase 10.4.9 (console E2E) |
+| Tool                          | What you need                             | Install / action                                          | Used in                               |
+| ----------------------------- | ----------------------------------------- | --------------------------------------------------------- | ------------------------------------- |
+| **Vitest**                    | Test runner (already in devDeps)          | Already installed ✓                                       | All phases                            |
+| **testcontainers-node**       | Programmatic Docker for integration tests | `pnpm add -D testcontainers` (when needed)                | Phase 8A (multi-instance tests)       |
+| **MSW (Mock Service Worker)** | API mocking for integration tests         | `pnpm add -D msw` (when needed)                           | Phase 9 (mock Jira/ServiceNow/GitHub) |
+| **Playwright** _(optional)_   | Browser E2E tests for console             | `pnpm add -D @playwright/test` → `npx playwright install` | Phase 10.4.9 (console E2E)            |
 
-*No accounts needed — just dev dependencies installed when their phase arrives.*
+_No accounts needed — just dev dependencies installed when their phase arrives._
 
 ---
 
 ### P0.0.15 Secrets Management (Production)
 
-| Service | What you need | Sign-up / action | Used in |
-|---|---|---|---|
-| **1Password / Bitwarden** *(team vault)* | Secure storage for all credentials listed above | Create a shared vault for RunwayCtrl team secrets | All phases (credential storage) |
-| **Platform secret stores** | Per-environment secret injection | Configure when each platform is set up: GitHub Actions Secrets, Vercel env vars, Render env vars | Phase 0.3+ (CI), Phase 10.4+ (hosting) |
+| Service                                  | What you need                                   | Sign-up / action                                                                                 | Used in                                |
+| ---------------------------------------- | ----------------------------------------------- | ------------------------------------------------------------------------------------------------ | -------------------------------------- |
+| **1Password / Bitwarden** _(team vault)_ | Secure storage for all credentials listed above | Create a shared vault for RunwayCtrl team secrets                                                | All phases (credential storage)        |
+| **Platform secret stores**               | Per-environment secret injection                | Configure when each platform is set up: GitHub Actions Secrets, Vercel env vars, Render env vars | Phase 0.3+ (CI), Phase 10.4+ (hosting) |
 
 ---
 
@@ -278,18 +278,18 @@ flowchart LR
 **Accounts to create / sign into (action required):**
 
 - [ ] **GitHub** — verify org ownership + enable Actions, CodeQL, Dependabot
-- [ ] **npm** *(optional now, required by Phase 11)* — reserve `@runwayctrl` org scope
-- [ ] **Docker Hub** *(optional)* — sign up to avoid anonymous pull rate limits
+- [ ] **npm** _(optional now, required by Phase 11)_ — reserve `@runwayctrl` org scope
+- [ ] **Docker Hub** _(optional)_ — sign up to avoid anonymous pull rate limits
 - [ ] **Render** — sign up, connect GitHub repo (staging/prod control-plane + Postgres)
 - [ ] **Vercel** — sign up, connect GitHub repo (console hosting)
-- [ ] **Cloudflare** *(recommended)* — sign up, add `runwayctrl.com` zone
+- [ ] **Cloudflare** _(recommended)_ — sign up, add `runwayctrl.com` zone
 - [ ] **Grafana Cloud** or **Honeycomb** or **Axiom** — sign up for observability backend
 - [ ] **Resend** or **Postmark** — sign up for transactional email (console magic links)
 - [ ] **OpenAI** — sign up for Hub LLM API key
 - [ ] **Jira Cloud Developer Site** — sign up for free sandbox
 - [ ] **ServiceNow Developer Instance** — sign up for free sandbox
 - [ ] **GitHub test repo** — create `runwayctrl-integration-test` + generate PAT
-- [ ] **Codecov** *(optional)* — sign up for coverage reporting
+- [ ] **Codecov** _(optional)_ — sign up for coverage reporting
 
 **CLI tools to install locally:**
 
@@ -306,10 +306,10 @@ flowchart LR
 - [ ] ServiceNow credentials → `SERVICENOW_USERNAME` / `SERVICENOW_PASSWORD`
 - [ ] OpenAI API key → `RUNWAYCTRL_HUB_API_KEY`
 - [ ] Resend API key → `RESEND_API_KEY`
-- [ ] npm automation token *(when publishing)* → `NPM_TOKEN`
-- [ ] Render API key *(if using CLI)* → platform-managed
+- [ ] npm automation token _(when publishing)_ → `NPM_TOKEN`
+- [ ] Render API key _(if using CLI)_ → platform-managed
 - [ ] Grafana Cloud / Honeycomb / Axiom OTLP endpoint + auth token → `OTEL_EXPORTER_OTLP_ENDPOINT`, `OTEL_EXPORTER_OTLP_HEADERS`
-- [ ] Codecov token *(optional)* → `CODECOV_TOKEN`
+- [ ] Codecov token _(optional)_ → `CODECOV_TOKEN`
 
 > **All credentials go into your team vault (1Password / Bitwarden) and are populated into `.env.local` (local dev) or platform secret stores (CI/staging/prod). Never commit secrets.**
 
