@@ -13,3 +13,6 @@ coverage/
 
 # Postgres data
 postgres-data/
+
+# Large manual-format docs (tables/diagrams) — managed via markdownlint instead of Prettier
+Documentation/Implementation Plan.md

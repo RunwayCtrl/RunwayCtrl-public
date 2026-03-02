@@ -5,7 +5,7 @@
 | Product         | RunwayCtrl                                                                   |
 | Doc Type        | Implementation Plan                                                          |
 | Version         | v0.1                                                                         |
-| Date            | January 21, 2026                                                             |
+| Date            | March 2, 2026                                                             |
 | Goal            | Build RunwayCtrl end-to-end (SDK + Control Plane + Ledger + Governor + OTel) |
 | Execution style | Phased delivery with “definition of done” gates per phase                    |
 | Source of truth | This plan + the Flow/PRD/Security/Backend docs in `Documentation/`           |
@@ -102,6 +102,15 @@ flowchart LR
   - Authenticate: `gh auth login`
   - Verify: `gh repo view RunwayCtrl/RunwayCtrl`
 
+**Status (verified on 2026-03-02):**
+
+- [x] `gh` installed
+- [x] `gh` authenticated to `github.com`
+- [x] Repo access verified: `RunwayCtrl/RunwayCtrl`
+- [x] GitHub Actions enabled for repo
+- [x] Branch protection checked on `main` (required status check present)
+- [x] GitHub Packages API accessible (token has `read:packages`)
+
 ---
 
 ### P0.0.2 Package Registry (npm)
@@ -113,6 +122,12 @@ flowchart LR
 > **Decision:** If publishing only via GitHub Packages, npm signup can be deferred to Phase 11. If you want the `@runwayctrl` scope reserved on npm now, sign up early.
 
 **CLI already available:** `pnpm` (in repo), `npm` (bundled with Node.js).
+
+**Status (verified on 2026-03-02):**
+
+- [x] npm CLI authenticated (`npm whoami` = `remih88`)
+- [x] Org created and accessible: `runwayctrl`
+- [x] Org membership verified (`npm org ls runwayctrl` shows `remih88 - owner`)
 
 ---
 
@@ -126,6 +141,12 @@ flowchart LR
 
 _No account needed — just install._
 
+**Status (verified on 2026-03-02):**
+
+- [x] Node.js installed (local `node --version` = `v24.5.0`)
+- [x] Corepack available (`corepack --version` = `0.34.0`)
+- [x] pnpm installed and aligned with repo (`pnpm --version` = `9.15.4`, `packageManager` = `pnpm@9.15.4`)
+
 ---
 
 ### P0.0.4 Container + Local Infrastructure
@@ -137,6 +158,12 @@ _No account needed — just install._
 
 **CLI:** `docker` and `docker compose` are included with Docker Desktop.
 
+**Status (verified on 2026-03-02):**
+
+- [x] Docker CLI installed (`docker --version` = `29.2.1`)
+- [x] Docker Compose available (`docker compose version` = `v5.0.2`)
+- [x] Docker daemon reachable (`docker ps` succeeded)
+
 ---
 
 ### P0.0.5 Database
@@ -147,6 +174,15 @@ _No account needed — just install._
 | **Managed Postgres (staging/prod)** | A hosted Postgres instance with backups + TLS | **Render:** https://render.com/ → sign up → create PostgreSQL instance (free tier available for dev; paid for prod). **Alternatives:** Neon (https://neon.tech/), Supabase (https://supabase.com/), Railway (https://railway.com/), or cloud-native (RDS/Cloud SQL/Azure Postgres) | Phase 10.4+ (hosted environments) |
 
 > **Action for staging:** Create the managed Postgres instance before Phase 10.4.2. Record the connection string (`DATABASE_URL`) in your secrets manager.
+
+**Status (complete this today):**
+
+- [x] Render Postgres instance created (name: `runwayctrl-staging-db`)
+- [x] Region selected (must match future control-plane region): `Oregon`
+- [x] Postgres version selected: `16`
+- [x] `External Database URL` copied into vault and saved to `.env.local` as `RENDER_DATABASE_URL_EXTERNAL`
+- [x] `Internal Database URL` copied into vault and saved to `.env.local` as `RENDER_DATABASE_URL_INTERNAL`
+- [x] Confirm local dev still uses Docker Postgres (`DATABASE_URL` remains local unless explicitly overridden)
 
 ---
 
@@ -164,6 +200,12 @@ _No account needed — just install._
 - [ ] `vercel` CLI — `pnpm add -g vercel` → `vercel login`
 - [ ] Render CLI _(optional)_ — Render is primarily web-dashboard-driven; CLI is nascent. Use the dashboard.
 
+**Status (verified on 2026-03-02):**
+
+- [x] `vercel` CLI installed (`vercel --version` succeeded)
+- [x] `vercel` authenticated (`vercel whoami` = `remih88`)
+- [x] `pnpm` global installs unblocked (ran `pnpm setup`; ensure a fresh terminal picks up `PNPM_HOME`)
+
 ---
 
 ### P0.0.7 Domain + DNS
@@ -172,6 +214,13 @@ _No account needed — just install._
 | ------------------------------------------- | ------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------- |
 | **Domain registrar** (for `runwayctrl.com`) | DNS management access                       | Verify you own `runwayctrl.com` and can create subdomains (`console.runwayctrl.com`, `api.runwayctrl.com`, `staging.console.runwayctrl.com`) | Phase 10.4.1                                   |
 | **Cloudflare** _(recommended)_              | DNS + CDN + WAF for control-plane perimeter | Sign up at https://www.cloudflare.com/ (free tier) → add `runwayctrl.com` zone → point nameservers                                           | Phase 10.4.4 (WAF/perimeter), optional earlier |
+
+**Status (verified on 2026-03-02):**
+
+- [x] Domain owned: `runwayctrl.com`
+- [x] DNS access confirmed (can manage records / nameservers)
+- [x] Cloudflare account exists (ready to add zone when we cut over)
+- [x] Note: domain currently in use on Vercel for marketing site (we’ll add `console.*` / `api.*` when ready)
 
 ---
 
@@ -187,6 +236,19 @@ _No account needed — just install._
 |                                                     |                                                   | • **Jaeger (self-hosted):** add to Docker Compose (no account)                                                              |                                     |
 
 > **Recommendation:** Start with **Grafana Cloud** (free tier covers dev + staging easily) or **Jaeger** self-hosted for local-only. Sign up now so OTLP exporter config is ready when Phase 2 OTel bootstrap begins.
+
+**Decision (2026-03-02):** Grafana Cloud (best DX + broad adoption; one backend for traces/metrics/logs).
+
+**Status (complete this today):**
+
+- [x] Grafana Cloud account created
+- [x] A stack created (name: `runwayctrl`)
+- [x] OTLP endpoint recorded in vault (env var: `OTEL_EXPORTER_OTLP_ENDPOINT`)
+- [x] OTLP auth recorded in vault (env var: `OTEL_EXPORTER_OTLP_HEADERS`)
+- [x] OTLP endpoint saved to `.env.local` (gitignored)
+- [x] OTLP auth saved to `.env.local` (gitignored)
+- [x] (Optional) Grafana Cloud API key stored in vault and/or `.env.local` (env var: `GRAFANA_CLOUD_API_KEY`)
+- [ ] (Optional) Non-secret identifiers recorded here for reference (org/stack id): `________________`
 
 **CLI:** The OTel Collector is a Docker container. No separate CLI install needed.
 
@@ -204,6 +266,13 @@ _No account needed — just install._
 
 > **Recommendation:** **Resend** — simple API, good free tier, great DX. Sign up before Phase 10.4.3.
 
+**Status (verified on 2026-03-02):**
+
+- [x] Resend account created
+- [x] Resend API key created (name: `runwayctrl staging email`)
+- [x] `RESEND_API_KEY` saved to vault
+- [x] `RESEND_API_KEY` staged in `.env.local` (gitignored)
+
 ---
 
 ### P0.0.10 LLM Provider (The Hub — Phase 8B.6)
@@ -216,28 +285,63 @@ _No account needed — just install._
 >
 > **Alternative providers:** Anthropic (https://console.anthropic.com/), Google AI (https://aistudio.google.com/), or any OpenAI-compatible endpoint. Swap via `RUNWAYCTRL_HUB_PROVIDER` + `RUNWAYCTRL_HUB_MODEL` env vars.
 
+**Decision (2026-03-02):** Provision now (OpenAI).
+
+**Status (complete this today):**
+
+- [x] OpenAI account verified
+- [x] API key created (name: `runwayctrl-hub-staging`)
+- [x] `RUNWAYCTRL_HUB_API_KEY` saved to vault
+- [x] (Optional) `RUNWAYCTRL_HUB_API_KEY` staged in `.env.local` (gitignored)
+
 ---
 
 ### P0.0.11 Integration Test Instances (Phase 9 — provision early)
 
 > These are free-tier developer instances for testing real API behavior. Provision them now so they exist when Phase 9 coding begins.
 
+<!-- markdownlint-disable MD060 -->
 | Service                                           | What you need                 | Sign-up / action                                                                                                                                                                                                                                       | Used in                             |
 | ------------------------------------------------- | ----------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ----------------------------------- |
-| **Jira Cloud Developer Site** (free)              | A sandbox Jira instance       | Sign up at https://developer.atlassian.com/ → "Create a cloud development site" → create project `RCTEST` → generate API token at https://id.atlassian.com/manage-profile/security/api-tokens → record `JIRA_BASE_URL`, `JIRA_EMAIL`, `JIRA_API_TOKEN` | Phase 9.2 (Jira integration)        |
-| **ServiceNow Personal Developer Instance** (free) | A sandbox ServiceNow instance | Sign up at https://developer.servicenow.com/ → "Request Instance" → note instance URL → record `SERVICENOW_INSTANCE_URL`, `SERVICENOW_USERNAME`, `SERVICENOW_PASSWORD`                                                                                 | Phase 9.2B (ServiceNow integration) |
+| **Jira Cloud Developer Site** (free)              | A sandbox Jira instance       | Sign up at <https://developer.atlassian.com/> → "Create a cloud development site" → create project `RCTEST` → generate API token at <https://id.atlassian.com/manage-profile/security/api-tokens> → record `JIRA_BASE_URL`, `JIRA_EMAIL`, `JIRA_API_TOKEN` | Phase 9.2 (Jira integration)        |
+| **ServiceNow Personal Developer Instance** (free) | A sandbox ServiceNow instance | Sign up at <https://developer.servicenow.com/> → "Request Instance" → note instance URL → record `SERVICENOW_INSTANCE_URL`, `SERVICENOW_USERNAME`, `SERVICENOW_PASSWORD`                                                                                 | Phase 9.2B (ServiceNow integration) |
 | **GitHub** (test repo)                            | Dedicated test repository     | Create `RunwayCtrl/runwayctrl-integration-test` (private) → generate fine-grained PAT scoped to test repo → record `GITHUB_TOKEN`                                                                                                                      | Phase 9.3 (GitHub integration)      |
+<!-- markdownlint-enable MD060 -->
+
+**Status (complete this today):**
+
+- [x] Jira dev site created (project: `RCTEST`)
+- [x] Jira credentials saved to vault (`JIRA_BASE_URL`, `JIRA_EMAIL`, `JIRA_API_TOKEN`)
+  - `JIRA_BASE_URL`: <https://runwayctrl-team.atlassian.net>
+- [x] ServiceNow dev instance created
+- [x] ServiceNow credentials saved to vault (`SERVICENOW_INSTANCE_URL`, `SERVICENOW_USERNAME`, `SERVICENOW_PASSWORD`)
+  - `SERVICENOW_INSTANCE_URL`: <https://dev181426.service-now.com>
+- [x] GitHub test repo created: `RunwayCtrl/runwayctrl-integration-test` (private)
+  - repo: <https://github.com/RunwayCtrl/runwayctrl-integration-test>
+- [x] Fine-grained PAT created and saved to vault (`GITHUB_TOKEN`)
 
 ---
 
 ### P0.0.12 Code Quality + Security Scanning
 
-| Service                                    | What you need                              | Sign-up / action                                                                       | Used in                  |
-| ------------------------------------------ | ------------------------------------------ | -------------------------------------------------------------------------------------- | ------------------------ |
-| **GitHub CodeQL**                          | SAST — included with GitHub                | Enable in repo: `Settings → Code security → Code scanning → Set up → Default`          | Phase 0.3 (CI)           |
-| **Dependabot**                             | Dependency scanning — included with GitHub | Enable: `Settings → Code security → Dependabot alerts → Enable` + add `dependabot.yml` | Phase 0.3 (CI)           |
-| **Renovate** _(alternative to Dependabot)_ | Dependency update PRs                      | Install GitHub App: https://github.com/apps/renovate → authorize for `RunwayCtrl` org  | Phase 0.3 (CI)           |
-| **Codecov** _(optional)_                   | Coverage reporting                         | Sign up at https://codecov.io/ → connect GitHub → add repo → record `CODECOV_TOKEN`    | Phase 0.3+ (CI coverage) |
+<!-- markdownlint-disable MD060 -->
+| Service                                    | What you need                            | Sign-up / action                                                                               | Used in                  |
+| ------------------------------------------ | ---------------------------------------- | -------------------------------------------------------------------------------------------- | ------------------------ |
+| **GitHub CodeQL**                          | SAST — included with GitHub              | Enable in repo: `Settings → Code security → Code scanning → Set up → Default`                | Phase 0.3 (CI)           |
+| **Dependabot**                             | Dependency scanning — included with GitHub | Enable: `Settings → Code security → Dependabot alerts → Enable` + add `dependabot.yml`       | Phase 0.3 (CI)           |
+| **Renovate** _(alternative to Dependabot)_ | Dependency update PRs                    | Install GitHub App: <https://github.com/apps/renovate> → authorize for `RunwayCtrl` org      | Phase 0.3 (CI)           |
+| **Codecov** _(optional)_                   | Coverage reporting                       | Sign up at <https://codecov.io/> → connect GitHub → add repo → record `CODECOV_TOKEN`        | Phase 0.3+ (CI coverage) |
+<!-- markdownlint-enable MD060 -->
+
+**Status (verified on 2026-03-02):**
+
+- [x] Dependabot configuration added: `.github/dependabot.yml`
+- [x] CodeQL workflow added: `.github/workflows/codeql.yml`
+- [ ] GitHub settings: enable **Dependabot alerts** (repo → `Settings → Code security`)
+- [ ] GitHub settings: confirm **Code scanning** is enabled and the CodeQL workflow is running
+- [ ] Note: for **private repos**, CodeQL results typically require **GitHub Advanced Security** to be enabled for the org/repo
+- [ ] Decide updater: use **Dependabot** _or_ **Renovate** (avoid running both to prevent duplicate PRs)
+- [ ] (Optional) Add Codecov only if you truly want external coverage reporting (otherwise keep coverage local)
 
 ---
 
@@ -1343,12 +1447,12 @@ Reference (canonical for Phase 9):
 > **Why now:** Real-instance validation during Phase 9 catches error-mapping, rate-limit, and idempotency surprises that MSW mocks cannot reproduce. Both services offer free tiers specifically designed for developer testing.
 
 - [ ] **Jira Cloud Developer Site** (free):
-  - [ ] Sign up at https://developer.atlassian.com/ → "Create a cloud development site"
+  - [ ] Sign up at <https://developer.atlassian.com/> → "Create a cloud development site"
   - [ ] Create test project with key `RCTEST`
-  - [ ] Generate API token at https://id.atlassian.com/manage-profile/security/api-tokens
+  - [ ] Generate API token at <https://id.atlassian.com/manage-profile/security/api-tokens>
   - [ ] Record: `JIRA_BASE_URL`, `JIRA_EMAIL`, `JIRA_API_TOKEN`
 - [ ] **ServiceNow Personal Developer Instance** (free):
-  - [ ] Sign up at https://developer.servicenow.com/ → "Request Instance"
+  - [ ] Sign up at <https://developer.servicenow.com/> → "Request Instance"
   - [ ] Note instance URL (e.g., `https://devXXXXX.service-now.com`)
   - [ ] Record: `SERVICENOW_INSTANCE_URL`, `SERVICENOW_USERNAME`, `SERVICENOW_PASSWORD`
   - [ ] Create a test assignment group `RunwayCtrl Dev` and a test category `RunwayCtrl Test`
