@@ -495,12 +495,12 @@ _Status: checked off as complete as of 2026-03-02 (repo work verified + owner co
 
 ### P0 Release Checklist
 
-- [ ] All Phase 0 work merged to `main` via squash-merge PRs
-- [ ] CI is green on `main`
-- [ ] Tag release: `git tag -a v0.0.1-phase0 -m "Phase 0: Repo foundation, dev environment, CI"`
-- [ ] Push tag: `git push origin v0.0.1-phase0`
-- [ ] Create GitHub Release from tag with summary of what shipped
-- [ ] Update `CHANGELOG.md` with Phase 0 entry
+- [x] All Phase 0 work merged to `main` via squash-merge PRs
+- [x] CI is green on `main`
+- [x] Tag release: `git tag -a v0.0.1-phase0 -m "Phase 0: Repo foundation, dev environment, CI"`
+- [x] Push tag: `git push origin v0.0.1-phase0`
+- [x] Create GitHub Release from tag with summary of what shipped
+- [x] Update `CHANGELOG.md` with Phase 0 entry
 
 ---
 
