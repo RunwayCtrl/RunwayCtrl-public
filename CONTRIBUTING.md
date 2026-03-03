@@ -104,9 +104,12 @@ For integration testing with real services (Jira, ServiceNow, GitHub), see [TEST
 
 ## Commit Conventions
 
-We use [Conventional Commits](https://www.conventionalcommits.org/):
+We use [Conventional Commits](https://www.conventionalcommits.org/) and **enforce them in CI**.
 
-```
+Because we **squash-merge** PRs to `main`, the **PR title becomes the commit message** on `main`.
+So: make your PR title a valid conventional commit (e.g. `feat(api): add /healthz`).
+
+```text
 <type>(<scope>): <description>
 
 [optional body]
@@ -134,12 +137,16 @@ We use [Conventional Commits](https://www.conventionalcommits.org/):
 
 ### Examples
 
-```
+```text
 feat(api): implement BeginAction endpoint with dedupe/replay logic
 fix(leases): prevent lease grant when existing holder has not expired
 docs(adr): add ADR-0010 for rate limit header capture strategy
 test(jira): add MSW handlers for 409 transition conflict scenario
 chore(deps): update vitest to 3.x
+
+# Squash merge commit examples (PR titles)
+chore: phase 0.1 monorepo scaffolding
+ci: enforce conventional commits
 ```
 
 ---

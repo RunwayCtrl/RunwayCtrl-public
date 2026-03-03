@@ -442,52 +442,53 @@ _Status: checked off as complete as of 2026-03-02 (repo work verified + owner co
 > **See [Backend Structure.md](Backend%20Structure.md) Section 3 for canonical folder structure.**
 
 - [ ] Create repo structure:
-  - [ ] `/apps/control-plane` — Fastify API
-  - [ ] `/apps/console` — Next.js dashboard (scaffolded, built in Phase 10)
-  - [ ] `/packages/shared` — Zod schemas
-  - [ ] `/packages/db` — DB client + helpers
-  - [ ] `/packages/sdk-core` — Keying, hashing, OTel
-  - [ ] `/packages/sdk-node` — Node HTTP client
-  - [ ] `/docs/*` — Import existing documentation
+  - [x] `/apps/control-plane` — Fastify API
+  - [x] `/apps/console` — Next.js dashboard (scaffolded, built in Phase 10)
+  - [x] `/packages/shared` — Zod schemas
+  - [x] `/packages/db` — DB client + helpers
+  - [x] `/packages/sdk-core` — Keying, hashing, OTel
+  - [x] `/packages/sdk-node` — Node HTTP client
+  - [x] `/docs/*` — Added `docs/` with a pointer README (canonical docs remain in `Documentation/`)
 - [ ] Add toolchain
-  - [ ] Node LTS + `pnpm`
-  - [ ] Typescript config (`tsconfig.base.json`)
-  - [ ] Linting (ESLint) + formatting (Prettier)
-  - [ ] Conventional commits (optional but recommended)
+  - [x] Node LTS + `pnpm`
+  - [x] Typescript config (`tsconfig.base.json`)
+  - [x] Linting (ESLint) + formatting (Prettier)
+  - [x] Conventional commits (MANDATORY)
+
 
 ## P0.2 Local environment (Docker Compose)
 
-- [ ] Create `docker-compose.yml`
-  - [ ] Postgres container + volume
-  - [ ] Redis container (optional toggle)
-  - [ ] OTel Collector container (optional early)
-- [ ] Add `.env.example`
-  - [ ] DB connection string
-  - [ ] Redis connection string
-  - [ ] API port + host
-  - [ ] OTel exporter config
-  - [ ] Trace link URL template config (`RUNWAYCTRL_TRACE_URL_TEMPLATE`)
-- [ ] Add local scripts:
-  - [ ] `pnpm dev` (start control-plane)
-  - [ ] `pnpm db:migrate`
-  - [ ] `pnpm db:seed` (create a dev tenant + API key)
-  - [ ] `pnpm test`
+- [x] Create `docker-compose.yml`
+  - [x] Postgres container + volume
+  - [x] Redis container (optional toggle)
+  - [x] OTel Collector container (optional early)
+- [x] Add `.env.example`
+  - [x] DB connection string
+  - [x] Redis connection string
+  - [x] API port + host
+  - [x] OTel exporter config
+  - [x] Trace link URL template config (`RUNWAYCTRL_TRACE_URL_TEMPLATE`)
+- [x] Add local scripts:
+  - [x] `pnpm dev` (start control-plane)
+  - [x] `pnpm db:migrate`
+  - [x] `pnpm db:seed` (Phase 0 canary seed; tenant + API key seed lands in P1.3)
+  - [x] `pnpm test`
 
 ## P0.3 CI/CD baseline
 
-- [ ] GitHub Actions workflows
-  - [ ] install + lint + test
-  - [ ] build artifacts
-- [ ] Secret scanning & dependency scanning
-  - [ ] Dependabot/Renovate
-  - [ ] basic SAST (CodeQL) (recommended)
+- [x] GitHub Actions workflows
+  - [x] install + lint + test
+  - [x] build artifacts
+- [x] Secret scanning & dependency scanning
+  - [x] Dependabot/Renovate
+  - [x] basic SAST (CodeQL) (recommended)
 
 ## P0 Gate: Definition of Done
 
-- [ ] `pnpm i` succeeds at repo root
-- [ ] `pnpm dev` runs control plane locally
-- [ ] Postgres comes up, migrations run
-- [ ] CI passes on a fresh branch
+- [x] `pnpm i` succeeds at repo root
+- [x] `pnpm dev` runs control plane locally
+- [x] Postgres comes up, migrations run
+- [x] CI passes on a fresh branch
 
 > **Testing gate note (planned tightening in Phase 1/2):** During Phase 0 it is acceptable for the integration-test job to use `vitest run --passWithNoTests` while no integration tests exist yet.
 > Once we add the first real integration tests (expected during **Phase 1** for DB/repos and/or **Phase 2** for HTTP/auth), remove `--passWithNoTests` so CI fails if the integration-test suite is empty.

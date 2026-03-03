@@ -25,6 +25,7 @@ Closes #
 - [ ] Changelog updated (if API/SDK change)
 - [ ] No secrets in code, logs, or comments
 - [ ] ADR added (if significant architectural decision)
+- [ ] PR title follows Conventional Commits (used as squash commit message on `main`)
 
 ## Screenshots / Evidence
 

@@ -1,0 +1,19 @@
+{
+  "name": "@runwayctrl/sdk-core",
+  "version": "0.1.1",
+  "private": true,
+  "type": "module",
+  "description": "RunwayCtrl SDK core utilities (hashing/keying/OTel helpers).",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit"
+  }
+}

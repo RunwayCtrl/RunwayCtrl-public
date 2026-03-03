@@ -79,6 +79,7 @@ Promotion rule:
 - component/integration tests pass (P0/P1)
 - lint + formatting pass
 - type checks pass (if applicable)
+- PR title follows Conventional Commits (squash-merge commit message)
 - security scan pass (SCA + secret scan)
 - migration check pass (if DB changed)
 - OTel contract validation pass (for instrumented paths)

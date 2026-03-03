@@ -1,0 +1,11 @@
+{
+  "name": "@runwayctrl/console",
+  "version": "0.1.1",
+  "private": true,
+  "type": "module",
+  "description": "RunwayCtrl console (Next.js). Scaffolding only in Phase 0.",
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit"
+  }
+}
