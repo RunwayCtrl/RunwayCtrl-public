@@ -5,12 +5,14 @@ import eslintConfigPrettier from 'eslint-config-prettier';
 export default tseslint.config(
   {
     ignores: [
-      'dist/',
-      'build/',
-      '.next/',
-      'out/',
-      'node_modules/',
-      'coverage/',
+      '**/dist/**',
+      '**/build/**',
+      '**/.next/**',
+      '**/out/**',
+      '**/node_modules/**',
+      '**/coverage/**',
+      '.husky/**',
+      'commitlint.config.cjs',
       'eslint.config.mjs',
     ],
   },

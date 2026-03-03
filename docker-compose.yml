@@ -1,0 +1,36 @@
+services:
+  postgres:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: runwayctrl
+      POSTGRES_PASSWORD: runwayctrl
+      POSTGRES_DB: runwayctrl
+    ports:
+      - '5432:5432'
+    volumes:
+      - runwayctrl_postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U runwayctrl -d runwayctrl']
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  redis:
+    image: redis:7
+    ports:
+      - '6379:6379'
+    command: ['redis-server', '--save', '', '--appendonly', 'no']
+    profiles: ['redis']
+
+  otel-collector:
+    image: otel/opentelemetry-collector-contrib:0.114.0
+    command: ['--config=/etc/otelcol-contrib/config.yaml']
+    volumes:
+      - ./otel-collector.local.yaml:/etc/otelcol-contrib/config.yaml:ro
+    ports:
+      - '4317:4317' # OTLP gRPC
+      - '4318:4318' # OTLP HTTP
+    profiles: ['otel']
+
+volumes:
+  runwayctrl_postgres_data:
