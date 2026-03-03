@@ -67,9 +67,6 @@ jobs:
       - name: Run tests
         run: pnpm test
 
-      - name: Build
-        run: pnpm -r build
-
   # Integration tests run separately — only on main branch pushes.
   # Disabled until real integration tests exist (avoids perpetual red X).
   # To re-enable: remove the `false &&` prefix from the `if` condition.

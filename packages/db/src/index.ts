@@ -1,6 +1,4 @@
-/**
- * DB package scaffolding (Phase 0).
- *
- * Phase 1 will add `pg` pool + tx helpers and migrations.
- */
-export const DB_PLACEHOLDER = true as const;
+export { createPool } from './pool.js';
+export { withTx } from './tx.js';
+
+export type { Pool, PoolClient, QueryResult } from 'pg';
