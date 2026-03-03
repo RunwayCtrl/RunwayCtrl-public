@@ -129,9 +129,7 @@ export const main = async (): Promise<void> => {
     console.warn('Plaintext API key was provided via RUNWAYCTRL_DEV_API_KEY_PLAINTEXT.');
     console.warn('Store it securely (do NOT commit/paste into logs/tickets).');
   } else {
-    console.warn(
-      'No RUNWAYCTRL_DEV_API_KEY_PLAINTEXT was provided; no plaintext key was printed.',
-    );
+    console.warn('No RUNWAYCTRL_DEV_API_KEY_PLAINTEXT was provided; no plaintext key was printed.');
     console.warn(
       'If a new key was required, the seed step will fail until RUNWAYCTRL_DEV_API_KEY_PLAINTEXT is provided.',
     );
