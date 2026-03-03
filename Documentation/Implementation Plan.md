@@ -395,41 +395,43 @@ _No accounts needed — just dev dependencies installed when their phase arrives
 
 ### P0.0 Checklist Summary (Quick Reference)
 
+_Status: checked off as complete as of 2026-03-02 (repo work verified + owner confirmation for external accounts/tokens)._
+
 **Accounts to create / sign into (action required):**
 
-- [ ] **GitHub** — verify org ownership + enable Actions, CodeQL, Dependabot
-- [ ] **npm** _(optional now, required by Phase 11)_ — reserve `@runwayctrl` org scope
-- [ ] **Docker Hub** _(optional)_ — sign up to avoid anonymous pull rate limits
-- [ ] **Render** — sign up, connect GitHub repo (staging/prod control-plane + Postgres)
-- [ ] **Vercel** — sign up, connect GitHub repo (console hosting)
-- [ ] **Cloudflare** _(recommended)_ — sign up, add `runwayctrl.com` zone
-- [ ] **Grafana Cloud** or **Honeycomb** or **Axiom** — sign up for observability backend
-- [ ] **Resend** or **Postmark** — sign up for transactional email (console magic links)
-- [ ] **OpenAI** — sign up for Hub LLM API key
-- [ ] **Jira Cloud Developer Site** — sign up for free sandbox
-- [ ] **ServiceNow Developer Instance** — sign up for free sandbox
-- [ ] **GitHub test repo** — create `runwayctrl-integration-test` + generate PAT
-- [ ] **Codecov** _(optional)_ — sign up for coverage reporting
+- [x] **GitHub** — verify org ownership + enable Actions, CodeQL, Dependabot
+- [x] **npm** _(optional now, required by Phase 11)_ — reserve `@runwayctrl` org scope
+- [x] **Docker Hub** _(optional)_ — sign up to avoid anonymous pull rate limits
+- [x] **Render** — sign up, connect GitHub repo (staging/prod control-plane + Postgres)
+- [x] **Vercel** — sign up, connect GitHub repo (console hosting)
+- [x] **Cloudflare** _(recommended)_ — sign up, add `runwayctrl.com` zone
+- [x] **Grafana Cloud** or **Honeycomb** or **Axiom** — sign up for observability backend
+- [x] **Resend** or **Postmark** — sign up for transactional email (console magic links)
+- [x] **OpenAI** — sign up for Hub LLM API key
+- [x] **Jira Cloud Developer Site** — sign up for free sandbox
+- [x] **ServiceNow Developer Instance** — sign up for free sandbox
+- [x] **GitHub test repo** — create `runwayctrl-integration-test` + generate PAT
+- [] **Codecov** _(optional)_ — sign up for coverage reporting
 
 **CLI tools to install locally:**
 
-- [ ] `node` (>= 20 LTS)
-- [ ] `pnpm` (>= 9)
-- [ ] `gh` (GitHub CLI)
-- [ ] `docker` + `docker compose` (Docker Desktop)
-- [ ] `vercel` (Vercel CLI)
+- [x] `node` (>= 20 LTS)
+- [x] `pnpm` (>= 9)
+- [x] `gh` (GitHub CLI)
+- [x] `docker` + `docker compose` (Docker Desktop)
+- [x] `vercel` (Vercel CLI)
 
 **API keys / tokens to generate and store:**
 
-- [ ] GitHub PAT (fine-grained, for integration tests) → `GITHUB_TOKEN`
-- [ ] Jira API token → `JIRA_API_TOKEN`
-- [ ] ServiceNow credentials → `SERVICENOW_USERNAME` / `SERVICENOW_PASSWORD`
-- [ ] OpenAI API key → `RUNWAYCTRL_HUB_API_KEY`
-- [ ] Resend API key → `RESEND_API_KEY`
-- [ ] npm automation token _(when publishing; see Phase 11 “Publish readiness” checklist)_ → `NPM_TOKEN`
-- [ ] Render API key _(if using CLI)_ → platform-managed
-- [ ] Grafana Cloud / Honeycomb / Axiom OTLP endpoint + auth token → `OTEL_EXPORTER_OTLP_ENDPOINT`, `OTEL_EXPORTER_OTLP_HEADERS`
-- [ ] Codecov token _(optional)_ → `CODECOV_TOKEN`
+- [x] GitHub PAT (fine-grained, for integration tests) → `GITHUB_TOKEN`
+- [x] Jira API token → `JIRA_API_TOKEN`
+- [x] ServiceNow credentials → `SERVICENOW_USERNAME` / `SERVICENOW_PASSWORD`
+- [x] OpenAI API key → `RUNWAYCTRL_HUB_API_KEY`
+- [x] Resend API key → `RESEND_API_KEY`
+- [x] npm automation token _(when publishing; see Phase 11 “Publish readiness” checklist)_ → `NPM_TOKEN`
+- [x] Render API key _(if using CLI)_ → platform-managed
+- [x] Grafana Cloud / Honeycomb / Axiom OTLP endpoint + auth token → `OTEL_EXPORTER_OTLP_ENDPOINT`, `OTEL_EXPORTER_OTLP_HEADERS`
+- [] Codecov token _(optional)_ → `CODECOV_TOKEN`
 
 > **All credentials go into your team vault (1Password / Bitwarden) and are populated into `.env.local` (local dev) or platform secret stores (CI/staging/prod). Never commit secrets.**
 
