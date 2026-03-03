@@ -9,15 +9,11 @@ type SeedResult =
   | {
       tenantId: string;
       tenantName: string;
-      apiKeyLabel: string;
       created: true;
-      plaintextApiKey: string;
-      apiKeyId: string;
     }
   | {
       tenantId: string;
       tenantName: string;
-      apiKeyLabel: string;
       created: false;
       reason: 'API_KEY_ALREADY_EXISTS';
     };
@@ -26,9 +22,11 @@ const generateId = (prefix: string): string => {
   return `${prefix}_${randomBytes(12).toString('hex')}`;
 };
 
-const generatePlaintextApiKey = (): string => {
-  // recognizability + copy/paste friendliness
-  return `rwc_${randomBytes(24).toString('base64url')}`;
+const getDevPlaintextApiKeyFromEnv = (): string | undefined => {
+  const raw = process.env.RUNWAYCTRL_DEV_API_KEY_PLAINTEXT;
+  if (!raw) return undefined;
+  const trimmed = raw.trim();
+  return trimmed.length > 0 ? trimmed : undefined;
 };
 
 const seedDevTenantAndApiKey = async (): Promise<SeedResult> => {
@@ -70,22 +68,25 @@ const seedDevTenantAndApiKey = async (): Promise<SeedResult> => {
         return {
           tenantId,
           tenantName,
-          apiKeyLabel,
           created: false,
           reason: 'API_KEY_ALREADY_EXISTS',
         };
       }
 
-      const plaintextApiKey = generatePlaintextApiKey();
+      const plaintextApiKey = getDevPlaintextApiKeyFromEnv();
+      if (!plaintextApiKey) {
+        throw new Error(
+          '[seed] RUNWAYCTRL_DEV_API_KEY_PLAINTEXT is required when creating a new dev API key. Generate one locally and re-run.',
+        );
+      }
       const apiKeyId = generateId('key');
       // @node-rs/argon2 defaults to Argon2id (best-practice default).
       const keyHash = await hash(plaintextApiKey);
 
-      const insertRes = await client.query<{ api_key_id: string }>(
+      await client.query(
         `
         insert into api_keys (api_key_id, tenant_id, label, key_hash)
         values ($1, $2, $3, $4)
-        returning api_key_id
         `,
         [apiKeyId, tenantId, apiKeyLabel, keyHash],
       );
@@ -93,10 +94,7 @@ const seedDevTenantAndApiKey = async (): Promise<SeedResult> => {
       return {
         tenantId,
         tenantName,
-        apiKeyLabel,
         created: true,
-        plaintextApiKey,
-        apiKeyId: insertRes.rows[0]!.api_key_id,
       };
     });
   } finally {
@@ -105,11 +103,12 @@ const seedDevTenantAndApiKey = async (): Promise<SeedResult> => {
 };
 
 export const main = async (): Promise<void> => {
+  const existingPlaintext = getDevPlaintextApiKeyFromEnv();
   const result = await seedDevTenantAndApiKey();
 
   if (!result.created) {
     console.warn(
-      `[seed] Dev API key already exists for tenant name "${result.tenantName}" (tenant_id=${result.tenantId}) and label "${result.apiKeyLabel}".`,
+      `[seed] Dev API key already exists for tenant name "${result.tenantName}" (tenant_id=${result.tenantId}).`,
     );
     console.warn('[seed] Not regenerating (plaintext cannot be recovered).');
     console.warn(
@@ -121,13 +120,21 @@ export const main = async (): Promise<void> => {
   console.warn('[seed] Created dev tenant + API key');
   console.warn(`  tenant_name=${result.tenantName}`);
   console.warn(`  tenant_id=${result.tenantId}`);
-  console.warn(`  api_key_label=${result.apiKeyLabel}`);
-  console.warn(`  api_key_id=${result.apiKeyId}`);
   console.warn('');
   console.warn('==================== IMPORTANT ====================');
-  console.warn('This API key will be shown ONCE. Store it securely.');
-  console.warn('Do NOT commit it. Do NOT paste it into tickets/logs.');
-  console.warn('===================================================');
-  console.warn(result.plaintextApiKey);
+  console.warn(
+    'For security, the plaintext API key is not printed by this script (CodeQL policy).',
+  );
+  if (existingPlaintext) {
+    console.warn('Plaintext API key was provided via RUNWAYCTRL_DEV_API_KEY_PLAINTEXT.');
+    console.warn('Store it securely (do NOT commit/paste into logs/tickets).');
+  } else {
+    console.warn(
+      'No RUNWAYCTRL_DEV_API_KEY_PLAINTEXT was provided; no plaintext key was printed.',
+    );
+    console.warn(
+      'If a new key was required, the seed step will fail until RUNWAYCTRL_DEV_API_KEY_PLAINTEXT is provided.',
+    );
+  }
   console.warn('===================================================');
 };
