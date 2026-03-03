@@ -601,8 +601,8 @@ _Status: checked off as complete as of 2026-03-02 (repo work verified + owner co
 
 ### P1 Release Checklist
 
-- [ ] All Phase 1 PRs squash-merged to `main` (branch naming: `feat/db-schema-*`, `feat/seed-*`, etc.)
-- [ ] CI is green on `main` (including first DB integration tests)
+- [x] All Phase 1 PRs squash-merged to `main` (branch naming: `feat/db-schema-*`, `feat/seed-*`, etc.)
+- [x] CI is green on `main` (including first DB integration tests)
 - [x] Re-enable integration test job in CI (`remove false &&` from `.github/workflows/ci.yml`)
 - [ ] Tag release: `git tag -a v0.1.0-phase1 -m "Phase 1: Ledger schema, data access layer, seed"`
 - [ ] Push tag: `git push origin v0.1.0-phase1`
