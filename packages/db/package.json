@@ -12,8 +12,14 @@
       "default": "./dist/index.js"
     }
   },
+  "dependencies": {
+    "pg": "^8.13.0"
+  },
+  "devDependencies": {
+    "@types/pg": "^8.15.5"
+  },
   "scripts": {
     "build": "tsc -p tsconfig.build.json",
-    "typecheck": "tsc -p tsconfig.json --noEmit"
+    "typecheck": "tsc -p tsconfig.build.json --emitDeclarationOnly"
   }
 }
