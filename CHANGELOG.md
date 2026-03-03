@@ -4,6 +4,23 @@ All notable changes to RunwayCtrl are documented in this file.
 
 This project aims to follow [Semantic Versioning](https://semver.org/spec/v2.0.0.html). Release entries are managed via Changesets.
 
+## Phase 1 (v0.1.0-phase1)
+
+### Added (Phase 1)
+
+- Durable Postgres ledger schema: tenants, API keys, actions, attempts, attempt events, and leases.
+- `@runwayctrl/db` workspace package (Postgres pool + transaction helper).
+- Ledger data access layer (repos) with tenant-scoped queries.
+- First DB-backed integration test suite verifying tenant isolation, transaction atomicity, and stable attempt-event ordering.
+- Dev seed for a tenant + API key:
+  - Hash-only storage (Argon2id)
+  - Plaintext key provided via env (`RUNWAYCTRL_DEV_API_KEY_PLAINTEXT`) when creating a new key
+  - No plaintext output/logging (secret hygiene)
+
+### Changed (Phase 1)
+
+- CI now runs the DB-backed integration-test job.
+
 ## Phase 0 (v0.0.1-phase0)
 
 ### Added (Phase 0)
