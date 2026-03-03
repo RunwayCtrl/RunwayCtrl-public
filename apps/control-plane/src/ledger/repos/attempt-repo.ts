@@ -28,7 +28,11 @@ const pickClient = (pool: Pool, client?: PoolClient): Pool | PoolClient => {
 export class AttemptRepo {
   constructor(private readonly pool: Pool) {}
 
-  async create(ctx: TenantContext, input: CreateAttemptInput, client?: PoolClient): Promise<AttemptRow> {
+  async create(
+    ctx: TenantContext,
+    input: CreateAttemptInput,
+    client?: PoolClient,
+  ): Promise<AttemptRow> {
     const db = pickClient(this.pool, client);
 
     const res = await db.query<AttemptRow>(
@@ -88,7 +92,11 @@ export class AttemptRepo {
     return res.rows[0];
   }
 
-  async getLatestByActionKey(ctx: TenantContext, actionKey: string, client?: PoolClient): Promise<AttemptRow | null> {
+  async getLatestByActionKey(
+    ctx: TenantContext,
+    actionKey: string,
+    client?: PoolClient,
+  ): Promise<AttemptRow | null> {
     const db = pickClient(this.pool, client);
     const res = await db.query<AttemptRow>(
       `

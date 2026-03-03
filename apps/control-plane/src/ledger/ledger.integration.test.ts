@@ -23,11 +23,15 @@ describe('ledger repos (integration)', () => {
 
   beforeEach(async () => {
     // Keep it simple: clean slate for each test.
-    await pool.query('truncate table attempt_events, attempts, leases, actions, api_keys, tenants restart identity cascade');
+    await pool.query(
+      'truncate table attempt_events, attempts, leases, actions, api_keys, tenants restart identity cascade',
+    );
   });
 
   it('enforces tenant isolation (same action_key can exist for different tenants)', async () => {
-    await pool.query(`insert into tenants (id, name) values ('t1', 'Tenant 1'), ('t2', 'Tenant 2')`);
+    await pool.query(
+      `insert into tenants (id, name) values ('t1', 'Tenant 1'), ('t2', 'Tenant 2')`,
+    );
 
     await actions.upsert(
       { tenantId: 't1' },
@@ -77,7 +81,9 @@ describe('ledger repos (integration)', () => {
     const action = await actions.getByKey({ tenantId: 't1' }, 'ak_atomic');
     expect(action).toBeNull();
 
-    const rows = await pool.query('select count(*)::int as c from attempts where tenant_id = $1', ['t1']);
+    const rows = await pool.query('select count(*)::int as c from attempts where tenant_id = $1', [
+      't1',
+    ]);
     expect(rows.rows[0].c).toBe(0);
   });
 
@@ -88,7 +94,10 @@ describe('ledger repos (integration)', () => {
       { tenantId: 't1' },
       { actionKey: 'ak_events', tool: 'toolA', action: 'doThing', requestHash: 'h1' },
     );
-    await attempts.create({ tenantId: 't1' }, { attemptId: 'att_events', actionKey: 'ak_events', requestHash: 'h1' });
+    await attempts.create(
+      { tenantId: 't1' },
+      { attemptId: 'att_events', actionKey: 'ak_events', requestHash: 'h1' },
+    );
 
     const ts = new Date('2026-03-03T00:00:00.000Z');
     await events.append({ tenantId: 't1' }, { attemptId: 'att_events', eventType: 'E1', ts });
