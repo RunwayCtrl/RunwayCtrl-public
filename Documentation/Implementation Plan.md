@@ -572,16 +572,16 @@ _Status: checked off as complete as of 2026-03-02 (repo work verified + owner co
   - [x] Create or reuse a dev tenant (idempotent by tenant name)
     - [x] Env override: `RUNWAYCTRL_DEV_TENANT_NAME` (default: `dev`)
   - [x] Create an API key for that tenant
-    - [x] Generate a random plaintext key (prefix `rwc_` for recognizability)
+    - [x] Accept a caller-provided plaintext key via env (`RUNWAYCTRL_DEV_API_KEY_PLAINTEXT`)
     - [x] Hash with **Argon2id** and store **hash only** in `api_keys.key_hash`
     - [x] Env override: `RUNWAYCTRL_DEV_API_KEY_LABEL` (default: `dev-key`)
-    - [x] Print the plaintext key **once** to stdout with a warning banner
+    - [x] Do **not** print the plaintext key to stdout/stderr (CodeQL / secret hygiene)
     - [x] Avoid accidental secret leakage:
       - [x] no structured logging around the plaintext
       - [x] no plaintext written to disk
       - [x] no plaintext stored in DB
   - [x] Confirm it works end-to-end locally:
-    - [x] `pnpm --filter @runwayctrl/control-plane db:seed` succeeds
+    - [x] `RUNWAYCTRL_DEV_API_KEY_PLAINTEXT=... pnpm --filter @runwayctrl/control-plane db:seed` succeeds (when creating a new key)
     - [x] Postgres shows `api_keys.key_hash` populated and plaintext absent
 
 - [x] Create test fixtures (`apps/control-plane/src/ledger/test/*`):
@@ -594,16 +594,16 @@ _Status: checked off as complete as of 2026-03-02 (repo work verified + owner co
 
 ## P1 Gate: Definition of Done
 
-- [ ] Migrations apply cleanly
-- [ ] Repos enforce tenant scoping (no unscoped queries)
-- [ ] Unique constraints prevent duplicates
-- [ ] Seed produces a working dev API key
+- [x] Migrations apply cleanly
+- [x] Repos enforce tenant scoping (no unscoped queries)
+- [x] Unique constraints prevent duplicates
+- [x] Seed produces a working dev API key
 
 ### P1 Release Checklist
 
 - [ ] All Phase 1 PRs squash-merged to `main` (branch naming: `feat/db-schema-*`, `feat/seed-*`, etc.)
 - [ ] CI is green on `main` (including first DB integration tests)
-- [ ] Re-enable integration test job in CI (`remove false &&` from `.github/workflows/ci.yml`)
+- [x] Re-enable integration test job in CI (`remove false &&` from `.github/workflows/ci.yml`)
 - [ ] Tag release: `git tag -a v0.1.0-phase1 -m "Phase 1: Ledger schema, data access layer, seed"`
 - [ ] Push tag: `git push origin v0.1.0-phase1`
 - [ ] Create GitHub Release from tag with migration summary and seed instructions
