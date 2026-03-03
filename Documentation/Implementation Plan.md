@@ -567,30 +567,30 @@ _Status: checked off as complete as of 2026-03-02 (repo work verified + owner co
 
 ## P1.3 Seed + fixtures
 
-- [ ] Create seed script (`apps/control-plane/src/ledger/seed.ts`):
-  - [ ] Load repo-root `.env` (dev-only convenience)
-  - [ ] Create or reuse a dev tenant (idempotent by tenant name)
-    - [ ] Env override: `RUNWAYCTRL_DEV_TENANT_NAME` (default: `dev`)
-  - [ ] Create an API key for that tenant
-    - [ ] Generate a random plaintext key (prefix `rwc_` for recognizability)
-    - [ ] Hash with **Argon2id** and store **hash only** in `api_keys.key_hash`
-    - [ ] Env override: `RUNWAYCTRL_DEV_API_KEY_LABEL` (default: `dev-key`)
-    - [ ] Print the plaintext key **once** to stdout with a warning banner
-    - [ ] Avoid accidental secret leakage:
-      - [ ] no structured logging around the plaintext
-      - [ ] no plaintext written to disk
-      - [ ] no plaintext stored in DB
-  - [ ] Confirm it works end-to-end locally:
-    - [ ] `pnpm --filter @runwayctrl/control-plane db:seed` succeeds
-    - [ ] Postgres shows `api_keys.key_hash` populated and plaintext absent
+- [x] Create seed script (`apps/control-plane/src/ledger/seed.ts`):
+  - [x] Load repo-root `.env` (dev-only convenience)
+  - [x] Create or reuse a dev tenant (idempotent by tenant name)
+    - [x] Env override: `RUNWAYCTRL_DEV_TENANT_NAME` (default: `dev`)
+  - [x] Create an API key for that tenant
+    - [x] Generate a random plaintext key (prefix `rwc_` for recognizability)
+    - [x] Hash with **Argon2id** and store **hash only** in `api_keys.key_hash`
+    - [x] Env override: `RUNWAYCTRL_DEV_API_KEY_LABEL` (default: `dev-key`)
+    - [x] Print the plaintext key **once** to stdout with a warning banner
+    - [x] Avoid accidental secret leakage:
+      - [x] no structured logging around the plaintext
+      - [x] no plaintext written to disk
+      - [x] no plaintext stored in DB
+  - [x] Confirm it works end-to-end locally:
+    - [x] `pnpm --filter @runwayctrl/control-plane db:seed` succeeds
+    - [x] Postgres shows `api_keys.key_hash` populated and plaintext absent
 
-- [ ] Create test fixtures (`apps/control-plane/src/ledger/test/*`):
-  - [ ] Create tenant helper (for integration tests)
-  - [ ] Add repo-level helpers to create actions/attempts/events in a tx
-  - [ ] Guardrails:
-    - [ ] fixtures must be tenant-explicit (require `RequestContext` or `tenantId`)
-    - [ ] fixtures must be composable inside `withTx(...)`
-    - [ ] avoid copy/paste SQL in tests where repos exist
+- [x] Create test fixtures (`apps/control-plane/src/ledger/test/*`):
+  - [x] Create tenant helper (for integration tests)
+  - [x] Add repo-level helpers to create actions/attempts/events in a tx
+  - [x] Guardrails:
+    - [x] fixtures must be tenant-explicit (require `RequestContext` or `tenantId`)
+    - [x] fixtures must be composable inside `withTx(...)`
+    - [x] avoid copy/paste SQL in tests where repos exist
 
 ## P1 Gate: Definition of Done
 

@@ -1,6 +1,7 @@
 import { describe, expect, it, beforeEach, afterAll } from 'vitest';
 import { createPool, withTx } from '@runwayctrl/db';
 import { ActionRepo, AttemptRepo, EventRepo } from './index.js';
+import { ensureTenant, truncateLedger } from './test/fixtures.js';
 
 const DATABASE_URL = process.env.DATABASE_URL;
 
@@ -22,16 +23,12 @@ describe('ledger repos (integration)', () => {
   });
 
   beforeEach(async () => {
-    // Keep it simple: clean slate for each test.
-    await pool.query(
-      'truncate table attempt_events, attempts, leases, actions, api_keys, tenants restart identity cascade',
-    );
+    await truncateLedger(pool);
   });
 
   it('enforces tenant isolation (same action_key can exist for different tenants)', async () => {
-    await pool.query(
-      `insert into tenants (id, name) values ('t1', 'Tenant 1'), ('t2', 'Tenant 2')`,
-    );
+    await ensureTenant(pool, { tenantId: 't1', name: 'Tenant 1' });
+    await ensureTenant(pool, { tenantId: 't2', name: 'Tenant 2' });
 
     await actions.upsert(
       { tenantId: 't1' },
@@ -53,7 +50,7 @@ describe('ledger repos (integration)', () => {
   });
 
   it('is atomic: action + attempts are rolled back together on failure', async () => {
-    await pool.query(`insert into tenants (id, name) values ('t1', 'Tenant 1')`);
+    await ensureTenant(pool, { tenantId: 't1', name: 'Tenant 1' });
 
     await expect(
       withTx(pool, async (client) => {
@@ -88,7 +85,7 @@ describe('ledger repos (integration)', () => {
   });
 
   it('orders attempt events by (ts, event_id) for stable reads', async () => {
-    await pool.query(`insert into tenants (id, name) values ('t1', 'Tenant 1')`);
+    await ensureTenant(pool, { tenantId: 't1', name: 'Tenant 1' });
 
     await actions.upsert(
       { tenantId: 't1' },
