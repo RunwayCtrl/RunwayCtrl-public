@@ -21,7 +21,11 @@ const pickClient = (pool: Pool, client?: PoolClient): Pool | PoolClient => {
 export class LeaseRepo {
   constructor(private readonly pool: Pool) {}
 
-  async acquire(ctx: TenantContext, input: AcquireLeaseInput, client?: PoolClient): Promise<LeaseRow> {
+  async acquire(
+    ctx: TenantContext,
+    input: AcquireLeaseInput,
+    client?: PoolClient,
+  ): Promise<LeaseRow> {
     const db = pickClient(this.pool, client);
     const res = await db.query<LeaseRow>(
       `
@@ -62,7 +66,11 @@ export class LeaseRepo {
     return res.rows[0];
   }
 
-  async get(ctx: TenantContext, resourceKey: string, client?: PoolClient): Promise<LeaseRow | null> {
+  async get(
+    ctx: TenantContext,
+    resourceKey: string,
+    client?: PoolClient,
+  ): Promise<LeaseRow | null> {
     const db = pickClient(this.pool, client);
     const res = await db.query<LeaseRow>(
       `

@@ -17,7 +17,11 @@ const pickClient = (pool: Pool, client?: PoolClient): Pool | PoolClient => {
 export class ActionRepo {
   constructor(private readonly pool: Pool) {}
 
-  async upsert(ctx: TenantContext, input: ActionUpsertInput, client?: PoolClient): Promise<ActionRow> {
+  async upsert(
+    ctx: TenantContext,
+    input: ActionUpsertInput,
+    client?: PoolClient,
+  ): Promise<ActionRow> {
     const db = pickClient(this.pool, client);
 
     const inserted = await db.query<ActionRow>(
@@ -32,13 +36,24 @@ export class ActionRepo {
         request_hash = excluded.request_hash
       returning tenant_id, action_key, tool, action, resource_key, request_hash, created_at
       `,
-      [ctx.tenantId, input.actionKey, input.tool, input.action, input.resourceKey ?? null, input.requestHash],
+      [
+        ctx.tenantId,
+        input.actionKey,
+        input.tool,
+        input.action,
+        input.resourceKey ?? null,
+        input.requestHash,
+      ],
     );
 
     return inserted.rows[0]!;
   }
 
-  async getByKey(ctx: TenantContext, actionKey: string, client?: PoolClient): Promise<ActionRow | null> {
+  async getByKey(
+    ctx: TenantContext,
+    actionKey: string,
+    client?: PoolClient,
+  ): Promise<ActionRow | null> {
     const db = pickClient(this.pool, client);
     const res = await db.query<ActionRow>(
       `

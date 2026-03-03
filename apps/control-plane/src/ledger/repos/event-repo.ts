@@ -23,11 +23,21 @@ export class EventRepo {
       insert into attempt_events (tenant_id, attempt_id, ts, event_type, details)
       values ($1, $2, $3, $4, $5::jsonb)
       `,
-      [ctx.tenantId, input.attemptId, input.ts ?? new Date(), input.eventType, JSON.stringify(input.details ?? {})],
+      [
+        ctx.tenantId,
+        input.attemptId,
+        input.ts ?? new Date(),
+        input.eventType,
+        JSON.stringify(input.details ?? {}),
+      ],
     );
   }
 
-  async listByAttemptId(ctx: TenantContext, attemptId: string, client?: PoolClient): Promise<AttemptEventRow[]> {
+  async listByAttemptId(
+    ctx: TenantContext,
+    attemptId: string,
+    client?: PoolClient,
+  ): Promise<AttemptEventRow[]> {
     const db = pickClient(this.pool, client);
     const res = await db.query<AttemptEventRow>(
       `
