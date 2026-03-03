@@ -514,26 +514,26 @@ _Status: checked off as complete as of 2026-03-02 (repo work verified + owner co
 
 ## P1.1 Schema design
 
-- [ ] Create migrations for:
-  - [ ] `tenants`
-  - [ ] `api_keys`
-  - [ ] `actions`
-  - [ ] `attempts`
-  - [ ] `attempt_events`
-  - [ ] `leases`
-- [ ] Add constraints (MANDATORY):
-  - [ ] `actions(tenant_id, action_key)` UNIQUE
-  - [ ] `attempts(tenant_id, attempt_id)` PK
-  - [ ] `leases(tenant_id, resource_key)` UNIQUE
-  - [ ] `attempt_events(tenant_id, attempt_id, ts)` indexed
-- [ ] Add indexes for performance:
-  - [ ] actions lookup by (tenant_id, action_key)
-  - [ ] attempts by (tenant_id, action_key, started_at desc)
-  - [ ] leases by (tenant_id, resource_key, expires_at)
+- [x] Create migrations for:
+  - [x] `tenants`
+  - [x] `api_keys`
+  - [x] `actions`
+  - [x] `attempts`
+  - [x] `attempt_events`
+  - [x] `leases`
+- [x] Add constraints (MANDATORY):
+  - [x] `actions(tenant_id, action_key)` UNIQUE
+  - [x] `attempts(tenant_id, attempt_id)` PK
+  - [x] `leases(tenant_id, resource_key)` UNIQUE
+  - [x] `attempt_events(tenant_id, attempt_id, ts)` indexed
+- [x] Add indexes for performance:
+  - [x] actions lookup by (tenant_id, action_key)
+  - [x] attempts by (tenant_id, action_key, started_at desc)
+  - [x] leases by (tenant_id, resource_key, expires_at)
 
-- [ ] Payload minimization (MANDATORY):
-  - [ ] Store `request_hash` / `outcome_hash` / `outcome_pointer` (or equivalent)
-  - [ ] No raw request/response payload columns in ledger tables (v0.1)
+- [x] Payload minimization (MANDATORY):
+  - [x] Store `request_hash` / `outcome_hash` / `outcome_pointer` (or equivalent)
+  - [x] No raw request/response payload columns in ledger tables (v0.1)
 
 ## P1.2 Data access layer (`/packages/db` + `/apps/control-plane/src/ledger`)
 
