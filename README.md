@@ -22,9 +22,9 @@
 <p align="center">
   <img alt="License" src="https://img.shields.io/badge/license-BUSL--1.1-blue.svg" />
   <img alt="Source Available" src="https://img.shields.io/badge/source--available-yes-6f42c1.svg" />
-  <img alt="TypeScript" src="https://img.shields.io/badge/TypeScript-5.x-3178C6?logo=typescript&logoColor=white" />
-  <img alt="Node" src="https://img.shields.io/badge/Node.js-%E2%89%A520-339933?logo=node.js&logoColor=white" />
-  <img alt="Postgres" src="https://img.shields.io/badge/Postgres-16+-336791?logo=postgresql&logoColor=white" />
+  <img alt="TypeScript" src="https://img.shields.io/badge/TypeScript-TypeScript-3178C6?logo=typescript&logoColor=white" />
+  <img alt="Node" src="https://img.shields.io/badge/Node.js-Node.js-339933?logo=node.js&logoColor=white" />
+  <img alt="Postgres" src="https://img.shields.io/badge/Postgres-Postgres-336791?logo=postgresql&logoColor=white" />
   <img alt="OpenTelemetry" src="https://img.shields.io/badge/OpenTelemetry-native-blueviolet?logo=opentelemetry" />
   <img alt="Status" src="https://img.shields.io/badge/status-v0.1%20development-orange" />
 </p>
@@ -64,7 +64,7 @@ RunwayCtrl provides five testable guarantees:
 
 ## Quick Start
 
-> **Prerequisites:** Node.js ≥ 20, pnpm, Docker (for Postgres)
+> **Prerequisites:** a recent Node.js, pnpm, Docker (for a local database)
 
 ```bash
 # Clone the repo
@@ -74,20 +74,20 @@ cd RunwayCtrl
 # Install dependencies
 pnpm install
 
-# Start local infrastructure (Postgres + optional Redis)
+# Start local infrastructure (database + optional cache)
 docker compose up -d
 
 # Run database migrations
 pnpm db:migrate
 
-# Seed a dev tenant + API key
+# Seed a dev tenant (and local credentials)
 pnpm db:seed
 
 # Start the control plane
 pnpm dev
 ```
 
-The control plane will be running at `http://localhost:8080`. Health check: `GET /healthz`.
+The control plane will be running locally (see logs for the URL).
 
 ### Your first governed tool call
 
@@ -118,51 +118,26 @@ const result = await rc.execute('jira.create_issue', {
 
 ## Architecture
 
+RunwayCtrl sits at the *tool boundary* and helps you make agent actions safe and auditable without changing how your tools work.
+
+At a high level, there are four moving parts:
+
+- **SDKs** used by agents/runners to register actions, record attempts, and retrieve outcomes.
+- A **control plane API** that applies coordination policies (idempotency, retry governance, bounded concurrency) and records results.
+- A **durable store** that acts as the system of record.
+- **Telemetry** emitted in a standards-based format so runs are explainable.
+
 ```text
-┌─────────────────────────────────────────────────────┐
-│                   Agent / Runner                     │
-│                                                      │
-│   ┌──────────────────────────────────────────────┐  │
-│   │            RunwayCtrl SDK (TypeScript)        │  │
-│   │  begin → tool call → complete/unknown → poll  │  │
-│   └──────────────┬───────────────────────────────┘  │
-└──────────────────┼───────────────────────────────────┘
-                   │ HTTPS
-┌──────────────────▼───────────────────────────────────┐
-│              RunwayCtrl Control Plane                  │
-│                                                       │
-│  ┌──────────┐ ┌──────────┐ ┌──────────┐ ┌─────────┐ │
-│  │  Dedupe   │ │  Leases  │ │ Governor │ │  Auth   │ │
-│  │  Engine   │ │  (TTL)   │ │(budget/  │ │(tenant- │ │
-│  │          │ │          │ │ backoff/ │ │ scoped) │ │
-│  │          │ │          │ │ circuit) │ │         │ │
-│  └────┬─────┘ └────┬─────┘ └────┬─────┘ └────┬────┘ │
-│       └─────────────┴────────────┴────────────┘      │
-│                        │                              │
-│  ┌─────────────────────▼──────────────────────────┐  │
-│  │         Durable Ledger (Postgres)               │  │
-│  │  actions · attempts · events · leases · stats   │  │
-│  └─────────────────────┬───────────────────────────┘  │
-│                        │                              │
-│  ┌─────────────────────▼──────────────────────────┐  │
-│  │     The Hub (LLM Analysis — GPT-5.2)           │  │
-│  │  pattern detection · cost insights · anomalies  │  │
-│  └─────────────────────┬───────────────────────────┘  │
-│                        │                              │
-│  ┌─────────────────────▼──────────────────────────┐  │
-│  │         OpenTelemetry Pipeline                   │  │
-│  │  traces · metrics · structured logs              │  │
-│  └──────────────────────────────────────────────────┘ │
-└───────────────────────────────────────────────────────┘
+Agent / Runner ──▶ RunwayCtrl SDK ──▶ Control Plane API ──▶ Durable Store
+                           │                     │
+                           └──── telemetry ───────┘
 ```
 
-**Key design decisions:**
+### Design principles
 
-- The control plane **never executes tool calls** — agents do. This eliminates SSRF and credential-handling surface.
-- Postgres is the **system of record**. Redis is an optional accelerator, never required for correctness.
-- The ledger stores **hashes and pointers**, not raw payloads — privacy-first by default.
-- Every table is **tenant-scoped** with enforced isolation (RLS recommended).
-- Telemetry is **allowlisted**, not filtered — only approved attributes are emitted.
+- **Separation of concerns:** your agent executes tools; RunwayCtrl coordinates and records outcomes.
+- **Privacy-first:** store the minimum metadata necessary for safety and auditing.
+- **Interoperability:** integrate cleanly with existing infrastructure and observability pipelines.
 
 ---
 
@@ -202,36 +177,12 @@ const pr = await rc.execute('github.merge_pr', {
 
 ## Project Structure
 
-```text
-RunwayCtrl/
-├── apps/
-│   ├── control-plane/          # Fastify API — the core control plane
-│   │   └── src/
-│   │       ├── api/            # Route handlers
-│   │       ├── domain/         # Core types: Action, Attempt, Lease
-│   │       ├── services/       # Use-case orchestration
-│   │       ├── governor/       # Budgets, backoff, circuits
-│   │       ├── ledger/         # Repository layer (Postgres)
-│   │       ├── auth/           # API keys, tenant resolution
-│   │       ├── observability/  # OTel wiring
-│   │       ├── analytics/      # Ledger Insights
-│   │       ├── hub/            # The Hub — LLM-powered execution analysis
-│   │       └── migrations/     # SQL migrations
-│   └── console/                # Next.js dashboard (read-only, v0.1)
-├── packages/
-│   ├── shared/                 # Zod schemas shared across SDK + API
-│   ├── db/                     # DB client + query helpers
-│   ├── sdk-core/               # Keying, hashing, normalization
-│   ├── sdk-node/               # Node.js HTTP client
-│   ├── integrations-jira/      # Jira wrapped actions
-│   ├── integrations-servicenow/# ServiceNow wrapped actions
-│   └── integrations-github/    # GitHub wrapped actions
-├── Documentation/              # Public API spec (detailed specs/runbooks are private)
-├── examples/                   # Demo runners + mock servers
-├── docker-compose.yml          # Local dev infrastructure
-├── TESTING.md                  # Test instance conventions
-└── CHANGELOG.md                # API/SDK change log
-```
+This is a pnpm workspace monorepo:
+
+- `apps/*` — runnable services and developer tooling (including the control plane).
+- `packages/*` — shared libraries and SDKs.
+- `Documentation/*` — public API specification artifacts.
+- Root docs — contribution, security, testing, and changelog.
 
 ---
 
@@ -248,49 +199,32 @@ High-level docs are linked here. Detailed internal specs/runbooks are intentiona
 
 ## Tech Stack
 
-| Layer             | Technology                     | Why                                                                         |
-| ----------------- | ------------------------------ | --------------------------------------------------------------------------- |
-| **Runtime**       | Node.js ≥ 20                   | TypeScript-native, async-first, agent ecosystem alignment                   |
-| **API**           | Fastify                        | Low overhead, schema validation, plugin ecosystem                           |
-| **Database**      | PostgreSQL 16+                 | ACID transactions, CAS patterns, tenant isolation via RLS                   |
-| **Cache**         | Redis (optional)               | Budget counters, rate-limit hints — never source of truth                   |
-| **Observability** | OpenTelemetry                  | Vendor-neutral traces + metrics, execution-aware spans                      |
-| **SDK**           | TypeScript                     | First-class types, tree-shakeable packages                                  |
-| **Dashboard**     | Next.js + Tailwind + shadcn/ui | React ecosystem, dark mode, bento grid layout                               |
-| **Monorepo**      | pnpm workspaces                | Fast installs, strict dependency isolation                                  |
-| **CI/CD**         | GitHub Actions                 | Native to our hosting, OIDC-ready                                           |
-| **LLM (Hub)**     | OpenAI GPT-5.2 (configurable)  | Async execution analysis — pattern detection, cost insights, anomaly alerts |
-| **Testing**       | Vitest + MSW + testcontainers  | Fast unit tests, deterministic mocks, real Postgres integration tests       |
+RunwayCtrl is built with a modern TypeScript stack and common infrastructure primitives:
+
+- TypeScript / Node.js runtime
+- HTTP API service
+- SQL database for durable coordination and auditing
+- Optional cache for performance hints (never the source of truth)
+- OpenTelemetry-compatible observability
+- pnpm workspaces monorepo
+- Unit + integration testing
+
+Implementation details may evolve over time; the public contract is the API + SDK behavior.
 
 ---
 
 ## API Overview
 
-```http
-# Begin a governed action
-POST /v1/actions/begin
-Authorization: Bearer <api_key>
+RunwayCtrl exposes a small HTTP API used by the SDKs to:
 
-# Complete an attempt (success or failure)
-POST /v1/attempts/{attempt_id}/complete
+- register an action (idempotent)
+- record attempts and outcomes
+- resolve unknown/ambiguous outcomes safely
+- query action status and ledger-derived insights
 
-# Mark an attempt as unknown (timeout/ambiguity)
-POST /v1/attempts/{attempt_id}/unknown
+The canonical reference is the OpenAPI spec: [`Documentation/openapi.yaml`](Documentation/openapi.yaml).
 
-# Check action status (poll for replay/resolution)
-GET /v1/actions/{action_key}
-
-# Ledger Insights (cost optimization, tool efficiency)
-GET /v1/insights/cost-summary
-GET /v1/insights/tool-efficiency
-GET /v1/insights/retry-waste
-GET /v1/insights/hotspots
-
-# The Hub (LLM-powered execution analysis)
-GET /v1/insights/hub
-```
-
-Full API reference: [`Documentation/openapi.yaml`](Documentation/openapi.yaml)
+If you’re integrating, prefer the SDKs in `packages/` rather than calling HTTP endpoints directly.
 
 ---
 
