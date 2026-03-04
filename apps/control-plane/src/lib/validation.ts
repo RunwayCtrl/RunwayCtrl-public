@@ -1,5 +1,5 @@
 import { SpanStatusCode, trace } from '@opentelemetry/api';
-import { ZodError, type ZodType } from 'zod';
+import type { ZodError, ZodType } from 'zod';
 
 import { pickRunwayctrlAttributes } from '../otel/attributes.js';
 

@@ -1,6 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { z } from 'zod';
-import { ZodError } from 'zod';
+import { ZodError, z } from 'zod';
 
 import { parseOrThrow, toValidationIssueSummaries } from './validation.js';
 
@@ -22,7 +21,8 @@ describe('validation utilities', () => {
       throw new Error('expected parseOrThrow to throw');
     } catch (e) {
       expect(e).toBeInstanceOf(ZodError);
-      const summaries = toValidationIssueSummaries(e as any);
+      if (!(e instanceof ZodError)) throw e;
+      const summaries = toValidationIssueSummaries(e);
       expect(summaries.length).toBeGreaterThan(0);
       expect(
         summaries.every((s) => typeof s.path === 'string' && typeof s.message === 'string'),

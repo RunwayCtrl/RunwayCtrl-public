@@ -246,10 +246,7 @@ export const buildApp = (options: StartServerOptions): FastifyInstance => {
       ._runwayctrlStartTimeNs;
     if (typeof start === 'bigint') {
       const durationSec = Number(process.hrtime.bigint() - start) / 1e9;
-      const route =
-        (request.routeOptions as any)?.url ??
-        (request as any).routerPath ??
-        (request as any).context?.config?.url;
+      const route = request.routeOptions?.url;
       httpServerDuration.record(durationSec, {
         'http.route': typeof route === 'string' && route.length > 0 ? route : 'unknown',
         'http.request.method': request.method,
@@ -285,7 +282,12 @@ export const buildApp = (options: StartServerOptions): FastifyInstance => {
 
     // Fastify validation errors (if we use schema validation later) should map to VALIDATION_ERROR.
     // Keep message safe.
-    if ((err as any)?.validation) {
+    if (
+      typeof err === 'object' &&
+      err !== null &&
+      'validation' in err &&
+      (err as { validation?: unknown }).validation
+    ) {
       return sendError(reply, requestId, new ApiError('VALIDATION_ERROR', 'Validation error', 400));
     }
 
