@@ -9,11 +9,13 @@ type SeedResult =
   | {
       tenantId: string;
       tenantName: string;
+      apiKeyId: string;
       created: true;
     }
   | {
       tenantId: string;
       tenantName: string;
+      apiKeyId: string;
       created: false;
       reason: 'API_KEY_ALREADY_EXISTS';
     };
@@ -68,6 +70,7 @@ const seedDevTenantAndApiKey = async (): Promise<SeedResult> => {
         return {
           tenantId,
           tenantName,
+          apiKeyId: existing.rows[0].api_key_id,
           created: false,
           reason: 'API_KEY_ALREADY_EXISTS',
         };
@@ -94,6 +97,7 @@ const seedDevTenantAndApiKey = async (): Promise<SeedResult> => {
       return {
         tenantId,
         tenantName,
+        apiKeyId,
         created: true,
       };
     });
@@ -110,6 +114,7 @@ export const main = async (): Promise<void> => {
     console.warn(
       `[seed] Dev API key already exists for tenant name "${result.tenantName}" (tenant_id=${result.tenantId}).`,
     );
+    console.warn(`  api_key_id=${result.apiKeyId}`);
     console.warn('[seed] Not regenerating (plaintext cannot be recovered).');
     console.warn(
       '[seed] To rotate, delete the existing API key row or change RUNWAYCTRL_DEV_API_KEY_LABEL and re-run.',
@@ -120,6 +125,9 @@ export const main = async (): Promise<void> => {
   console.warn('[seed] Created dev tenant + API key');
   console.warn(`  tenant_name=${result.tenantName}`);
   console.warn(`  tenant_id=${result.tenantId}`);
+  console.warn(`  api_key_id=${result.apiKeyId}`);
+  console.warn('');
+  console.warn('[seed] Bearer token format: <api_key_id>.<api_key_secret>');
   console.warn('');
   console.warn('==================== IMPORTANT ====================');
   console.warn(

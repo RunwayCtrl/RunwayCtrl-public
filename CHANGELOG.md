@@ -4,6 +4,25 @@ All notable changes to RunwayCtrl are documented in this file.
 
 This project aims to follow [Semantic Versioning](https://semver.org/spec/v2.0.0.html). Release entries are managed via Changesets.
 
+## Phase 2 (v0.1.0-phase2)
+
+### Added (Phase 2)
+
+- Control-plane HTTP API skeleton (Fastify):
+  - `X-Request-Id` on every response (with safe echo/generation)
+  - Standard error envelope across all failures (including 404)
+  - Liveness/readiness split: `GET /healthz` (cheap) and `GET /readyz` (DB dependency)
+  - Basic abuse guardrails: per-IP and per-tenant fixed-window rate limiting
+- API key authentication with DB-friendly bearer token format:
+  - `Authorization: Bearer <api_key_id>.<api_key_secret>` (O(1) lookup by `api_key_id`)
+  - Argon2id secret verification with short-lived in-process success cache
+  - Revocation enforcement (`revoked_at`)
+- Minimal authenticated sanity endpoint: `GET /v1/whoami`.
+- Zod validation utilities with a consistent `VALIDATION_ERROR` response mapping.
+- OpenTelemetry bootstrapping (Node SDK) + contract instrumentation:
+  - Internal span: `runwayctrl.auth.verify_api_key`
+  - Metric: `runwayctrl.http.server.duration` (histogram, seconds)
+
 ## Phase 1 (v0.1.0-phase1)
 
 ### Added (Phase 1)
