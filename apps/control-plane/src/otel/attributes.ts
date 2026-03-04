@@ -1,6 +1,7 @@
 import type { Attributes } from '@opentelemetry/api';
 
 // Stable, contract-defined RunwayCtrl custom span attribute keys.
+// See: Documentation/02-otel-contract.md
 const ALLOWED_RUNWAYCTRL_KEYS = new Set<string>([
   'runwayctrl.tenant_id',
   'runwayctrl.request_id',

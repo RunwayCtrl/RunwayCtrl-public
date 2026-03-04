@@ -68,7 +68,7 @@ For integration testing with real services (Jira, ServiceNow, GitHub), see [TEST
 
 ### File Organization
 
-- Follow the existing folder structure in this repository (apps/packages separation, small modules)
+- Follow the canonical folder structure in [Backend Structure.md](Documentation/Backend%20Structure.md)
 - One concept per file; files should be < 300 lines (split if larger)
 - Barrel exports (`index.ts`) per package/module
 
@@ -96,8 +96,8 @@ For integration testing with real services (Jira, ServiceNow, GitHub), see [TEST
 
 ### Documentation
 
-- Every behavior change must update the relevant _public_ docs in the same PR (README, OpenAPI, changelog as applicable)
-- Some design documentation (roadmap/runbooks/internal ADRs) is maintained privately; external contributors should focus PRs on code + tests + API surface
+- Every behavior change must update the relevant docs in the same PR
+- ADRs (Architecture Decision Records) for significant technical decisions — see [ADR template](Documentation/adr-template.md)
 - Inline code comments for non-obvious "why" decisions (not "what" — code should be self-explanatory)
 
 ---
@@ -207,7 +207,7 @@ Include:
 
 ## Architecture Decisions
 
-Significant design decisions are tracked internally.
+Significant decisions are tracked as ADRs in `Documentation/ADR-*.md`.
 
 **When to write an ADR:**
 
@@ -216,7 +216,7 @@ Significant design decisions are tracked internally.
 - Adding a new integration or storage system
 - Modifying guarantee semantics
 
-If you’re proposing a non-trivial change, include rationale and tradeoffs in the PR description.
+See the [ADR template](Documentation/adr-template.md) and [ADR log](Documentation/adr-log.md).
 
 ---
 

@@ -20,8 +20,7 @@
 </p>
 
 <p align="center">
-  <img alt="License" src="https://img.shields.io/badge/license-BUSL--1.1-blue.svg" />
-  <img alt="Source Available" src="https://img.shields.io/badge/source--available-yes-6f42c1.svg" />
+  <img alt="License" src="https://img.shields.io/badge/license-Apache%202.0-blue.svg" />
   <img alt="TypeScript" src="https://img.shields.io/badge/TypeScript-5.x-3178C6?logo=typescript&logoColor=white" />
   <img alt="Node" src="https://img.shields.io/badge/Node.js-%E2%89%A520-339933?logo=node.js&logoColor=white" />
   <img alt="Postgres" src="https://img.shields.io/badge/Postgres-16+-336791?logo=postgresql&logoColor=white" />
@@ -43,8 +42,6 @@ Without coordination:
 - Nobody can reconstruct what happened → **debugging becomes screenshots and vibes**
 
 **RunwayCtrl sits at the tool boundary and makes every call safe, governed, and explainable.**
-
-> **Licensing note:** RunwayCtrl is **source-available**. Production use requires a commercial license unless explicitly permitted. See [`LICENSE`](LICENSE).
 
 ---
 
@@ -226,7 +223,7 @@ RunwayCtrl/
 │   ├── integrations-jira/      # Jira wrapped actions
 │   ├── integrations-servicenow/# ServiceNow wrapped actions
 │   └── integrations-github/    # GitHub wrapped actions
-├── Documentation/              # Public API spec (detailed specs/runbooks are private)
+├── Documentation/              # Specs, ADRs, runbooks, guidelines
 ├── examples/                   # Demo runners + mock servers
 ├── docker-compose.yml          # Local dev infrastructure
 ├── TESTING.md                  # Test instance conventions
@@ -237,7 +234,7 @@ RunwayCtrl/
 
 ## Documentation
 
-High-level docs are linked here. Detailed internal specs/runbooks are intentionally not published in this repository.
+High-level docs are linked here. More detailed design notes/specs are intentionally kept out of the README.
 
 - API reference: [`Documentation/openapi.yaml`](Documentation/openapi.yaml)
 - Change history: [`CHANGELOG.md`](CHANGELOG.md)
@@ -343,4 +340,20 @@ See [SECURITY.md](SECURITY.md) for our security policy and responsible disclosur
 
 ## License
 
-This project is licensed under the [Business Source License 1.1](LICENSE) (**BUSL-1.1**).
+This project is licensed under the [Apache License 2.0](LICENSE).
+
+```text
+Copyright 2026 RunwayCtrl Contributors
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+```

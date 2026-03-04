@@ -8,7 +8,7 @@ info:
     policy-driven retry/denial behavior (budgets/backoff/circuiting).
 
     Normative language: MUST/SHOULD/MAY where applicable.
-    This OpenAPI document is the public API reference.
+    See Documentation/API Contract.md and Documentation/Error Codes and Retry.md.
 servers:
   - url: https://api.runwayctrl.dev
     description: Production

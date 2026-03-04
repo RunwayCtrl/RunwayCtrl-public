@@ -33,6 +33,9 @@ coverage/
 test-results/
 playwright-report/
 
+# Public sync snapshot artifacts (generated locally / in CI workdirs)
+.public-snapshot*/
+
 # Docker volumes (local dev)
 .docker-data/
 postgres-data/

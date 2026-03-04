@@ -1,0 +1,61 @@
+{
+  "exported_from_ref": "main",
+  "exported_from_sha": "24aa66f407530b3a7156e2aaf5eb339df0c2ae94",
+  "exported_at_utc": "2026-03-04T21:11:43.111Z",
+  "total_tracked_files": 156,
+  "exported_files": 84,
+  "skipped_by_filter": 71,
+  "config": {
+    "managed_prefixes": [
+      "apps/",
+      "packages/",
+      "src/",
+      ".changeset/"
+    ],
+    "managed_files": [
+      ".editorconfig",
+      ".env.example",
+      ".gitattributes",
+      ".gitignore",
+      ".prettierignore",
+      ".prettierrc",
+      "CHANGELOG.md",
+      "CODE_OF_CONDUCT.md",
+      "CONTRIBUTING.md",
+      "LICENSE",
+      "README.md",
+      "SECURITY.md",
+      "TESTING.md",
+      "commitlint.config.cjs",
+      "docker-compose.yml",
+      "eslint.config.mjs",
+      "package.json",
+      "pnpm-lock.yaml",
+      "pnpm-workspace.yaml",
+      "tsconfig.base.json",
+      "tsconfig.build.json",
+      "tsconfig.json",
+      "turbo.json",
+      "vitest.integration.config.ts",
+      "vitest.unit.config.ts"
+    ],
+    "exclude_prefixes": [
+      "Documentation/",
+      ".git/"
+    ],
+    "exclude_files": [
+      ".env",
+      ".env.local",
+      ".env.production",
+      ".env.staging"
+    ],
+    "exceptions": [
+      "Documentation/openapi.yaml",
+      "Documentation/API Contract.md",
+      "Documentation/Error Codes and Retry.md",
+      "Documentation/RUNWAYCTRL_PROJECT_OVERVIEW.md",
+      "Documentation/examples.http",
+      "Documentation/README.md"
+    ]
+  }
+}

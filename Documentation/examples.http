@@ -1,0 +1,60 @@
+# HTTP examples for RunwayCtrl API v0.1
+#
+# Requires a local server on http://localhost:8080
+# and an API key set in your environment as:
+#   RUNWAYCTRL_API_KEY
+
+### Health check
+GET http://localhost:8080/healthz
+
+### BeginAction (PROCEED example)
+POST http://localhost:8080/v1/actions/begin
+Authorization: Bearer {{RUNWAYCTRL_API_KEY}}
+Content-Type: application/json
+
+{
+	"tool": "jira",
+	"action": "create_issue",
+	"args_hash": "sha256:deadbeefcafebabef00d",
+	"resource_key": "jira:project:ENG",
+	"idempotency_support": "HEADER",
+	"join_window_ms": 0,
+	"dedupe_window_ms": 3600000
+}
+
+### Get Action Status
+GET http://localhost:8080/v1/actions/act_9k3dW2bFvJmH1Zk2pQ8n
+Authorization: Bearer {{RUNWAYCTRL_API_KEY}}
+
+### Complete Attempt (SUCCESS)
+POST http://localhost:8080/v1/attempts/3fa85f64-5717-4562-b3fc-2c963f66afa6/complete
+Authorization: Bearer {{RUNWAYCTRL_API_KEY}}
+Content-Type: application/json
+
+{
+	"status": "SUCCESS",
+	"outcome_hash": "sha256:beadbeadbeadbead",
+	"outcome_pointer": "s3://runwayctrl-outcomes/tenant/action/attempt.json",
+	"latency_ms": 842
+}
+
+### Mark Attempt UNKNOWN (timeout/network)
+POST http://localhost:8080/v1/attempts/3fa85f64-5717-4562-b3fc-2c963f66afa6/unknown
+Authorization: Bearer {{RUNWAYCTRL_API_KEY}}
+Content-Type: application/json
+
+{
+	"reason": "TIMEOUT",
+	"latency_ms": 30000
+}
+
+### Acquire Lease (optional)
+POST http://localhost:8080/v1/leases/acquire
+Authorization: Bearer {{RUNWAYCTRL_API_KEY}}
+Content-Type: application/json
+
+{
+	"resource_key": "jira:issue:ABC-123",
+	"holder_id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+	"ttl_ms": 60000
+}
